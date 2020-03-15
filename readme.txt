@@ -1,3 +1,3 @@
 
 
-в itignore добавь папку idea
+в gitignore добавь папку idea
