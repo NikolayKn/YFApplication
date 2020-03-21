@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">YFApplication</string>
+    
+    <string-array name="choice">
+        <item>Первое</item>
+        <item>Второе</item>
+        <item>Третье</item>
+        <item>Четвертое</item>
+
+    </string-array>
 </resources>
