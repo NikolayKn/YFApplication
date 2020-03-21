@@ -30,6 +30,8 @@ public class MyFragment extends Fragment {
         View view = inflater.inflate(R.layout.mfragment, container, false);
         Context context = view.getContext();
 
+
+        // Адаптер строкового массива для выбора ведра
         ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice, android.R.layout.simple_spinner_item);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -38,12 +40,15 @@ public class MyFragment extends Fragment {
         spinner.setAdapter(Adapter);
         spinner.setPrompt("Title");
 
+        // Установка предыдущего выбора пользователя
         if (getActivity() != null){
             MainActivity ma = (MainActivity) getActivity();
             spinner.setSelection(ma.loadText());
         }
 
 
+        // Слушатель спинера
+        // TODO Связь с определённым ведром
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
