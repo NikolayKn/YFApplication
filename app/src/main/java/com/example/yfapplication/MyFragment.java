@@ -23,11 +23,13 @@ import com.example.yfapplication.R;
 public class MyFragment extends Fragment {
 
     String[] selected_bucket = {"Первое", "Второе", "Третье", "Четвёртое"};
-
+    View view;
     @Nullable
     @Override
+
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.mfragment, container, false);
+        view = inflater.inflate(R.layout.mfragment, container, false);
         Context context = view.getContext();
 
 
@@ -36,6 +38,8 @@ public class MyFragment extends Fragment {
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         Spinner spinner = view.findViewById(R.id.spinner);
+        //TextView message = view.findViewById(R.id.message);
+        //setText("something");
 
         spinner.setAdapter(Adapter);
         spinner.setPrompt("Title");
@@ -68,6 +72,12 @@ public class MyFragment extends Fragment {
 
         return view;
     }
+    public void setText(String item) {
+
+        TextView Mes = (TextView) view.findViewById(R.id.message);
+        Mes.setText(item);
+    }
+
 }
 
 
