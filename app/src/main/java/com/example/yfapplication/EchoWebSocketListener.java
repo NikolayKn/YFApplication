@@ -1,7 +1,9 @@
+
 package com.example.yfapplication;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,6 +16,8 @@ public final class EchoWebSocketListener extends WebSocketListener {
     private static final int NORMAL_CLOSURE_STATUS = 1000;
     private Context mcontext;
 
+    private static final String TAG = "myLogs";
+
     EchoWebSocketListener(Context context){
         this.mcontext = context;
         //mcontext = context;
@@ -21,20 +25,25 @@ public final class EchoWebSocketListener extends WebSocketListener {
 
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
+        Log.d(TAG, "91f19onOpen");
         webSocket.send("Hello, it's the second module!");
     }
 
     @Override
     public void onMessage(WebSocket webSocket, String text) {
+        Log.d(TAG, "91f19onMessage");
         output("Receiving : " + text);
+
 
 
     }
 
     private void output(String text) {
-    //mcontext.MainActivity.
-        MainActivity.setText(text);
-
+        //mcontext.MainActivity.
+        Log.d(TAG, "91f19output");
+        // MainActivity.setText(text);
+        // Data.addmessage(text);
+        Data.getInstance().setVariable(text);
     }
 
     @Override
@@ -45,11 +54,16 @@ public final class EchoWebSocketListener extends WebSocketListener {
     @Override
     public void onClosing(WebSocket webSocket, int code, String reason) {
         webSocket.close(NORMAL_CLOSURE_STATUS, null);
+        Log.d(TAG, "91f19onClosing " + code + " / " + reason);
+        webSocket.close(NORMAL_CLOSURE_STATUS, null);
+        //output("Closing : " + code + " / " + reason);
     }
+
 
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-        super.onFailure(webSocket, t, response);
+        Log.d(TAG, "91f19onFailure" + t.getMessage());
+        //output("Error : " + t.getMessage());
     }
 
 }

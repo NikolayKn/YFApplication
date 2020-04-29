@@ -3,6 +3,7 @@ package com.example.yfapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +25,10 @@ public class MyFragment extends Fragment {
 
     String[] selected_bucket = {"Первое", "Второе", "Третье", "Четвёртое"};
     View view;
+    private static final String TAG = "myLogs";
+
     @Nullable
     @Override
-
-
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.mfragment, container, false);
         Context context = view.getContext();
@@ -38,8 +39,6 @@ public class MyFragment extends Fragment {
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         Spinner spinner = view.findViewById(R.id.spinner);
-        //TextView message = view.findViewById(R.id.message);
-        //setText("something");
 
         spinner.setAdapter(Adapter);
         spinner.setPrompt("Title");
@@ -72,12 +71,15 @@ public class MyFragment extends Fragment {
 
         return view;
     }
+
     public void setText(String item) {
+        Log.d(TAG, "91f19 set text in fragment");
+
+
 
         TextView Mes = (TextView) view.findViewById(R.id.message);
         Mes.setText(item);
+        getFragmentManager().beginTransaction().detach(this).commit();
+        getFragmentManager().beginTransaction().attach(this).commit();
     }
-
 }
-
-
