@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mData =Data.getInstance();
         myListener = new MyListener();
+        mData.addListener(myListener);
+
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -54,16 +56,25 @@ public class MainActivity extends AppCompatActivity {
         EchoWebSocketListener listener = new EchoWebSocketListener(getApplicationContext());
         WebSocket ws = client.newWebSocket(request, listener);
         Log.d(TAG, "91f19 finish creating websocket");
-        //client.dispatcher().executorService().shutdown();
+        client.dispatcher().executorService().shutdown();
+
 
 
 
     }
 
-    public static void setText() {
-        Log.d(TAG, "91f19 settext in main");
-        mfragment.setText(Data.getInstance().getmessage());
+    public void setText() {
+        Log.d(TAG, "91f19 set_text in main");
+       // mfragment.setText(Data.getInstance().getmessage());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mfragment.fragmentsetText(Data.getInstance().getmessage());
+                //output.setText(output.getText().toString() + "\n\n" + txt);
+            }
+        });
     }
+
 
 
     // Методы реализуют сохранение и загрузку выбора spinner
@@ -71,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     // Сохранение
     void saveText(int number) {
         Log.d(TAG, "91f19 save text in main");
-        Log.d(TAG,"91f19 "+ mData.getmessage());
+        Log.d(TAG,"91f19 in save_text_in_main "+ mData.getmessage());
         // Объект shared preference
         sPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
@@ -104,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void propertyChange(PropertyChangeEvent event) {
             Log.d(TAG, "listener works!");
+            System.out.println("listener_works!!!!");
             setText();
             //System.out.println("Property \"" + event.getPropertyName() + "\" has new value: " + event.getNewValue());
         }

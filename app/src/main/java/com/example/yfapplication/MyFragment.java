@@ -32,6 +32,8 @@ public class MyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.mfragment, container, false);
         Context context = view.getContext();
+        TextView Mes = (TextView) view.findViewById(R.id.message);
+        Mes.setText(Data.getInstance().getmessage());
 
 
         // Адаптер строкового массива для выбора ведра
@@ -72,14 +74,14 @@ public class MyFragment extends Fragment {
         return view;
     }
 
-    public void setText(String item) {
+    public synchronized void fragmentsetText(String item) {
         Log.d(TAG, "91f19 set text in fragment");
 
 
 
         TextView Mes = (TextView) view.findViewById(R.id.message);
         Mes.setText(item);
-        getFragmentManager().beginTransaction().detach(this).commit();
-        getFragmentManager().beginTransaction().attach(this).commit();
+        //getFragmentManager().beginTransaction().detach(this).commit();
+        //getFragmentManager().beginTransaction().attach(this).commit();
     }
 }

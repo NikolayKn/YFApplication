@@ -31,6 +31,8 @@ public class Data {
 
     //private String variable = "Initial";
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
+    //support.addPropertyChangeListener()
+
 
     public void addListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -44,7 +46,8 @@ public class Data {
         Log.d(TAG, "91f19 setVariable");
         String oldValue = message;
         message = newValue;
+        Log.d(TAG,"91f19 in_setvariable_before "+ message);
         support.firePropertyChange("variable", oldValue, newValue);
-        Log.d(TAG,"91f19 "+ message);
+        Log.d(TAG,"91f19 in_setvariable_after "+ message);
     }
 }

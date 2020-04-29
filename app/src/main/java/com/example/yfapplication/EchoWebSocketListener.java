@@ -18,7 +18,7 @@ public final class EchoWebSocketListener extends WebSocketListener {
 
     private static final String TAG = "myLogs";
 
-    EchoWebSocketListener(Context context){
+    EchoWebSocketListener(Context context) {
         this.mcontext = context;
         //mcontext = context;
     }
@@ -33,9 +33,6 @@ public final class EchoWebSocketListener extends WebSocketListener {
     public void onMessage(WebSocket webSocket, String text) {
         Log.d(TAG, "91f19onMessage");
         output("Receiving : " + text);
-
-
-
     }
 
     private void output(String text) {
@@ -62,7 +59,7 @@ public final class EchoWebSocketListener extends WebSocketListener {
 
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-        Log.d(TAG, "91f19onFailure" + t.getMessage());
+        Log.d(TAG, "91f19onFailure  " + t.getMessage());
         //output("Error : " + t.getMessage());
     }
 
