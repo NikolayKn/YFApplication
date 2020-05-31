@@ -23,7 +23,6 @@ import com.example.yfapplication.R;
 
 public class MyFragment extends Fragment {
 
-    String[] selected_bucket = {"Первое", "Второе", "Третье", "Четвёртое"};
     View view;
     private static final String TAG = "myLogs";
 
@@ -33,7 +32,6 @@ public class MyFragment extends Fragment {
         view = inflater.inflate(R.layout.mfragment, container, false);
         Context context = view.getContext();
         TextView Mes = (TextView) view.findViewById(R.id.message);
-        Mes.setText(Data.getInstance().getmessage());
 
 
         // Адаптер строкового массива для выбора ведра
@@ -76,12 +74,21 @@ public class MyFragment extends Fragment {
 
     public synchronized void fragmentsetText(String item) {
         Log.d(TAG, "91f19 set text in fragment");
-
-
-
         TextView Mes = (TextView) view.findViewById(R.id.message);
         Mes.setText(item);
         //getFragmentManager().beginTransaction().detach(this).commit();
         //getFragmentManager().beginTransaction().attach(this).commit();
+    }
+
+    @Override
+    public void onDetach() {
+        Log.d(TAG, "91f19 onDetach");
+        super.onDetach();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        Log.d(TAG, "91f19 onAttach");
+        super.onAttach(context);
     }
 }

@@ -1,19 +1,11 @@
 
 package com.example.yfapplication;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.beans.PropertyChangeEvent;
@@ -41,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mData =Data.getInstance();
+        mData = Data.getInstance();
         myListener = new MyListener();
         mData.addListener(myListener);
 
@@ -53,14 +45,10 @@ public class MainActivity extends AppCompatActivity {
         client = new OkHttpClient();
         Log.d(TAG, "91f19start creating request");
         Request request = new Request.Builder().url("ws://echo.websocket.org").build();
-        EchoWebSocketListener listener = new EchoWebSocketListener(getApplicationContext());
+        BucketWebSocketListener listener = new BucketWebSocketListener(getApplicationContext());
         WebSocket ws = client.newWebSocket(request, listener);
         Log.d(TAG, "91f19 finish creating websocket");
         client.dispatcher().executorService().shutdown();
-
-
-
-
     }
 
     public void setText() {
@@ -114,10 +102,15 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void propertyChange(PropertyChangeEvent event) {
-            Log.d(TAG, "listener works!");
-            System.out.println("listener_works!!!!");
-            setText();
-            //System.out.println("Property \"" + event.getPropertyName() + "\" has new value: " + event.getNewValue());
+            String propertyName = event.getPropertyName();
+            if ("variableMessage".equals(propertyName)) {
+                Log.d(TAG, "91f19 listener works!");
+                System.out.println("listener_works!!!!");
+                setText();
+            }
+            if ("variableBucket".equals(propertyName)){
+
+            }
         }
     }
 

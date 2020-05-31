@@ -12,15 +12,14 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public final class EchoWebSocketListener extends WebSocketListener {
+public final class BucketWebSocketListener extends WebSocketListener {
     private static final int NORMAL_CLOSURE_STATUS = 1000;
     private Context mcontext;
 
     private static final String TAG = "myLogs";
 
-    EchoWebSocketListener(Context context) {
+    BucketWebSocketListener(Context context) {
         this.mcontext = context;
-        //mcontext = context;
     }
 
     @Override
@@ -32,16 +31,13 @@ public final class EchoWebSocketListener extends WebSocketListener {
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         Log.d(TAG, "91f19onMessage");
-        output("Receiving : " + text);
-    }
-
-    private void output(String text) {
         //mcontext.MainActivity.
         Log.d(TAG, "91f19output");
         // MainActivity.setText(text);
         // Data.addmessage(text);
-        Data.getInstance().setVariable(text);
+        Data.getInstance().setVariableMessage(text);
     }
+    
 
     @Override
     public void onMessage(WebSocket webSocket, ByteString bytes) {

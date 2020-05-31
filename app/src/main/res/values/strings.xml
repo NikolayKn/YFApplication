@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">YFApplication</string>
     <string name="app">YFApplication</string>
-
+    <string name="default_message">Waiting...</string>
 
 
     <string-array name="choice">
