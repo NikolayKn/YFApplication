@@ -20,7 +20,7 @@ public class Data {
     private int ordername; // Номер заказа
     private String mealname; // Название блюда
     private int timecooking; // Время готовки
-    private modeNum mode; // Режим
+    private modeNum mode = modeNum.WAITING; // Режим
 
 
     public synchronized static Data getInstance() {
@@ -35,6 +35,12 @@ public class Data {
         return sInstance.message;
 
     }
+    public static modeNum getmode(){
+        return sInstance.mode;
+
+    }
+
+
 
     public void addListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
@@ -53,6 +59,13 @@ public class Data {
         Log.d(TAG,"91f19 in_setvariable_after "+ message);
     }
 
+    private void setVariableMode(modeNum newValue) {
+        Log.d(TAG, "91f19 setVariableMode");
+        modeNum oldValue = mode;
+        mode = newValue;
+        support.firePropertyChange("variableMode", oldValue, newValue);
+    }
+
     public void setVariableBucket(bucketNum newValue) {
         Log.d(TAG, "91f19 setVariableBucket");
         bucketNum oldValue = bucket;
@@ -67,24 +80,28 @@ public class Data {
         try {
             switch (json.getInt("mode")){
                 case 0: // Режим ожидания заказа (Нет никакой информации)
-                    mode = modeNum.WAITING;
+                    this.setVariableMode(modeNum.WAITING);
+                    //mode = modeNum.WAITING;
                     break;
                 case 1: //Режим готовки блюда (Информация есть)
-                    mode = modeNum.COOKING;
+                    this.setVariableMode(modeNum.COOKING);
+                    //mode = modeNum.COOKING;
                     name = json.getString("name");
                     ordername = json.getInt("ordername");
                     mealname = json.getString("mealname");
                     timecooking = json.getInt("timecooking");
                     break;
                 case 2: //Режим готовности блюда (Информация есть)
-                    mode = modeNum.READY;
+                    //mode = modeNum.READY;
+                    this.setVariableMode(modeNum.READY);
                     name = json.getString("name");
                     ordername = json.getInt("ordername");
                     mealname = json.getString("mealname");
                     timecooking = json.getInt("timecooking");
                     break;
                 case 3: // Режим смены тарелки (Информация есть)
-                    mode = modeNum.PUT;
+                    this.setVariableMode(modeNum.PUT);
+                    //mode = modeNum.PUT;
                     name = json.getString("name");
                     ordername = json.getInt("ordername");
                     mealname = json.getString("mealname");
@@ -100,23 +117,17 @@ public class Data {
 }
 
 enum bucketNum {
-    FIRST(1),
-    SECOND(2),
-    THIRD(3),
-    FOURTH(4);
-    private int num;
-    bucketNum(int num){
-        this.num = num;
-    }
+    FIRST,
+    SECOND,
+    THIRD,
+    FOURTH
+
 };
 
 enum modeNum { // Режим
-    WAITING(0),
-    COOKING(1),
-    READY(2),
-    PUT(3);
-    private int num;
-    modeNum(int num){
-        this.num = num;
-    }
+    WAITING,
+    COOKING,
+    READY,
+    PUT
+
 };

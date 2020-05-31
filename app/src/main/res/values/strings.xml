@@ -2,6 +2,7 @@
     <string name="app_name">YFApplication</string>
     <string name="app">YFApplication</string>
     <string name="default_message">Waiting...</string>
+    <string name="title">YFApplication</string>
 
 
     <string-array name="choice">

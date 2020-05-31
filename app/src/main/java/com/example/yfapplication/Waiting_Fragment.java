@@ -1,6 +1,5 @@
 package com.example.yfapplication;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,19 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.yfapplication.R;
 
-
-public class MyFragment extends Fragment {
+public class Waiting_Fragment extends Fragment {
 
     View view;
     private static final String TAG = "myLogs";
@@ -29,13 +24,14 @@ public class MyFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.mfragment, container, false);
+        view = inflater.inflate(R.layout.waiting_fragment, container, false);
         Context context = view.getContext();
         TextView Mes = (TextView) view.findViewById(R.id.message);
+        Mes.setText(Data.getInstance().getmessage());
 
 
         // Адаптер строкового массива для выбора ведра
-        ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice, R.layout.waiting_spinner_item);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         Spinner spinner = view.findViewById(R.id.spinner);

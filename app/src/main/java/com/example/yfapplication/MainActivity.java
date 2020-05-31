@@ -2,6 +2,7 @@
 package com.example.yfapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,9 +22,21 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sPref;
     final String SAVED_TEXT = "0";
     private OkHttpClient client;
-    private static MyFragment mfragment = new MyFragment();
+    //private static Waiting_Fragment waiting_fragment = new Waiting_Fragment();
     private MyListener myListener;
     private Data mData;
+    private Waiting_Fragment waiting_fragment = new Waiting_Fragment();
+    private Cooking_Fragment cooking_fragment = new Cooking_Fragment();
+    private Ready_Fragment ready_fragment = new Ready_Fragment();
+    private Put_Fragment put_fragment = new Put_Fragment();
+    enum modeNum { // Режим
+        WAITING,
+        COOKING,
+        READY,
+        PUT
+    };
+    modeNum mode;
+
 
 
 
@@ -36,12 +49,17 @@ public class MainActivity extends AppCompatActivity {
         mData = Data.getInstance();
         myListener = new MyListener();
         mData.addListener(myListener);
+       // Waiting_Fragment waiting_fragment = new Waiting_Fragment();
+
 
 
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.fragment_container, mfragment)
+                .add(R.id.fragment_container, waiting_fragment)
                 .commit();
+
+
+        mode = modeNum.WAITING;
         client = new OkHttpClient();
         Log.d(TAG, "91f19start creating request");
         Request request = new Request.Builder().url("ws://echo.websocket.org").build();
@@ -51,16 +69,53 @@ public class MainActivity extends AppCompatActivity {
         client.dispatcher().executorService().shutdown();
     }
 
-    public void setText() {
+    public void setData() {
         Log.d(TAG, "91f19 set_text in main");
-       // mfragment.setText(Data.getInstance().getmessage());
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mfragment.fragmentsetText(Data.getInstance().getmessage());
-                //output.setText(output.getText().toString() + "\n\n" + txt);
-            }
-        });
+        FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
+        switch (Data.getInstance().getmode()) {
+            case WAITING:
+                mtransaction.add(R.id.fragment_container,waiting_fragment).commit();
+                Log.d(TAG, "91f19 add waiting fragment");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
+
+                    }
+                });
+
+                break;
+            case COOKING:
+                mtransaction.add(R.id.fragment_container,cooking_fragment).commit();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
+
+                    }
+                });
+                break;
+            case READY:
+                mtransaction.add(R.id.fragment_container,ready_fragment).commit();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
+
+                    }
+                });
+                break;
+            case PUT:
+                mtransaction.add(R.id.fragment_container,put_fragment).commit();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
+
+                    }
+                });
+                break;
+        }
     }
 
 
@@ -105,8 +160,24 @@ public class MainActivity extends AppCompatActivity {
             String propertyName = event.getPropertyName();
             if ("variableMessage".equals(propertyName)) {
                 Log.d(TAG, "91f19 listener works!");
-                System.out.println("listener_works!!!!");
-                setText();
+                FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
+                switch (mode){
+                    case WAITING:
+                        mtransaction.remove(waiting_fragment).commit();//.commit();
+
+                        Log.d(TAG, "91f19 remove waiting fragment");
+                        break;
+                    case COOKING:
+                        mtransaction.remove(cooking_fragment);//.commit();
+                        break;
+                    case READY:
+                        mtransaction.remove(ready_fragment);//.commit();
+                        break;
+                    case PUT:
+                        mtransaction.remove(put_fragment);//.commit();
+                        break;
+                }
+                setData();
             }
             if ("variableBucket".equals(propertyName)){
 
