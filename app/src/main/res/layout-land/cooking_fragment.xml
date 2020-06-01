@@ -22,19 +22,24 @@
         android:layout_width="160dp"
         android:layout_height="32dp"
         android:layout_gravity="right"
-        android:background="@color/cooking_colorPrimaryDark" />
+        android:background="@color/cooking_colorPrimary" />
 
     <TextView
 
-        android:id="@+id/message"
+        android:id="@+id/cooking_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="70dp"
         android:text="@string/default_message"
-        android:textSize="32sp"
-        android:textColor="@color/cooking_colorPrimary"
-        android:background="@color/cooking_colorPrimaryDark"
+        android:textStyle="bold"
+        android:shadowColor="@color/cooking_shadowText"
+        android:shadowDx="2"
+        android:shadowDy="2"
+        android:shadowRadius="5"
+        android:textSize="44sp"
+        android:textColor="@color/cooking_colorPrimaryDark"
+        android:background="#00E45801"
 
         />
 

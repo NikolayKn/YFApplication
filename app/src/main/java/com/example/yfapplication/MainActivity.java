@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         READY,
         PUT
     }
-    modeNum mode= modeNum.WAITING;
+    modeNum mode = modeNum.WAITING;
     private static final String TAG = "myLogs";
 
     @Override
@@ -46,18 +46,10 @@ public class MainActivity extends AppCompatActivity {
         mData = Data.getInstance();
         myListener = new MyListener();
         mData.addListener(myListener);
-       // Waiting_Fragment waiting_fragment = new Waiting_Fragment();
-
-
-
-
-
-
         switch (mode) {
             case WAITING:
                 mtransaction.add(R.id.fragment_container,waiting_fragment).commit();
                 Log.d(TAG, "91f19 fragment waiting create first time  ");
-
                 break;
             case COOKING:
                 mtransaction.add(R.id.fragment_container,cooking_fragment).commit();
@@ -73,11 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
 
-
-
-
-
-
         client = new OkHttpClient();
         Log.d(TAG, "91f19start creating request");
         Request request = new Request.Builder().url("ws://echo.websocket.org").build();
@@ -89,46 +76,47 @@ public class MainActivity extends AppCompatActivity {
 
     public void setData() {
         Log.d(TAG, "91f19 set_text in main");
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (mode) {
             case WAITING:
-                mtransaction.replace(R.id.fragment_container,waiting_fragment).commit();
+                fragmentTransaction.replace(R.id.fragment_container, waiting_fragment).commit();
                 Log.d(TAG, "91f19 add waiting fragment");
                 runOnUiThread(new Runnable() {
                     @Override
-
                         public void run() {
+                            mtransaction.replace(R.id.fragment_container, waiting_fragment).commit();
                             waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
                     }
                 });
-
                 break;
             case COOKING:
-                mtransaction.replace(R.id.fragment_container,cooking_fragment).commit();
                 Log.d(TAG, "91f19 add cooking fragment");
+                fragmentTransaction.replace(R.id.fragment_container, cooking_fragment).commit();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         cooking_fragment.fragmentsetText(Data.getInstance().getmessage());
-
                     }
                 });
                 break;
             case READY:
-                mtransaction.replace(R.id.fragment_container,ready_fragment).commit();
+                Log.d(TAG, "91f19 add ready fragment");
+                fragmentTransaction.replace(R.id.fragment_container,ready_fragment).commit();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
+                        ready_fragment.fragmentsetText(Data.getInstance().getmessage());
 
                     }
                 });
                 break;
             case PUT:
-                mtransaction.replace(R.id.fragment_container,put_fragment).commit();
+                Log.d(TAG, "91f19 add put fragment");
+                fragmentTransaction.replace(R.id.fragment_container,put_fragment).commit();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
+                        put_fragment.fragmentsetText(Data.getInstance().getmessage());
 
                     }
                 });

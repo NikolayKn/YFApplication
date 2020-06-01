@@ -12,6 +12,7 @@
     <color name="cooking_colorPrimary">#FFA23F</color>
     <color name="cooking_colorPrimaryDark">#E45801</color>
     <color name="cooking_colorAccent">#CCFF9D</color>
+    <color name="cooking_shadowText">#712D01</color>
 
     <color name="ready_colorPrimary">#69FF3F</color>
     <color name="ready_colorPrimaryDark">#006904</color>
