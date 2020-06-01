@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setData() {
         Log.d(TAG, "91f19 set_text in main");
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         switch (mode) {
             case WAITING:
                 fragmentTransaction.replace(R.id.fragment_container, waiting_fragment).commit();
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                         public void run() {
-                            mtransaction.replace(R.id.fragment_container, waiting_fragment).commit();
+                            fragmentTransaction.replace(R.id.fragment_container, waiting_fragment).commit();
                             waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
                     }
                 });
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             String propertyName = event.getPropertyName();
             if ("variableMessage".equals(propertyName)) {
                 Log.d(TAG, "91f19 listener works!");
-                mode = modeNum.COOKING;
+                mode = modeNum.WAITING;
               /*  FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
                 switch (mode){
                     case WAITING:

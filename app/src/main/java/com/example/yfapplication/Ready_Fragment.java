@@ -24,7 +24,7 @@ public class Ready_Fragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.ready_fragment, container, false);
         Context context = view.getContext();
-        TextView Mes = (TextView) view.findViewById(R.id.message);
+        TextView Mes = (TextView) view.findViewById(R.id.ready_message);
 
 
         // Адаптер строкового массива для выбора ведра
@@ -67,7 +67,7 @@ public class Ready_Fragment extends Fragment {
 
     public synchronized void fragmentsetText(String item) {
         Log.d(TAG, "91f19 set text in fragment");
-        TextView Mes = (TextView) view.findViewById(R.id.message);
+        TextView Mes = (TextView) view.findViewById(R.id.ready_message);
         Mes.setText(item);
         //getFragmentManager().beginTransaction().detach(this).commit();
         //getFragmentManager().beginTransaction().attach(this).commit();

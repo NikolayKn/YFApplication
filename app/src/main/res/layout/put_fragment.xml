@@ -26,12 +26,12 @@
 
     <TextView
 
-        android:id="@+id/message"
+        android:id="@+id/put_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="64dp"
-        android:text="@string/default_message"
+        android:text="@string/message_put"
         android:textSize="32sp"
         android:textColor="@color/colorPrimary"
         android:background="@color/colorPrimaryDark"

@@ -31,7 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="64dp"
-        android:text="@string/default_message"
+        android:text="@string/message_cooking"
         android:textSize="32sp"
         android:textColor="@color/cooking_colorPrimary"
         android:background="@color/cooking_colorPrimaryDark"

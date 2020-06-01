@@ -2,16 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@color/ready_colorPrimary"
     >
 
 
     <TextView
         android:id="@+id/textView"
-        android:textColor="@color/colorPrimary"
+        android:textColor="@color/ready_colorPrimaryDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
         android:layout_marginTop="16dp"
         android:layout_gravity="center"
         android:text="@string/title" />
@@ -22,20 +21,23 @@
         android:layout_width="160dp"
         android:layout_height="32dp"
         android:layout_gravity="right"
-        android:background="@color/colorPrimaryDark" />
+        android:background="@color/ready_colorPrimary" />
 
     <TextView
 
-        android:id="@+id/message"
+        android:id="@+id/ready_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="64dp"
-        android:text="@string/default_message"
-        android:textSize="32sp"
-        android:textColor="@color/colorPrimary"
-        android:background="@color/colorPrimaryDark"
-
+        android:layout_marginTop="70dp"
+        android:text="@string/message_ready"
+        android:textSize="44sp"
+        android:textColor="@color/ready_colorPrimaryDark"
+        android:textStyle="bold"
+        android:shadowColor="@color/ready_shadowText"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="6"
         />
 
 
