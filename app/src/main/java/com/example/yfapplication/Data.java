@@ -66,12 +66,28 @@ public class Data {
         support.firePropertyChange("variableMode", oldValue, newValue);
     }
 
-    public void setVariableBucket(bucketNum newValue) {
+    public void setVariableBucket(int newVal) {
+        bucketNum NewValue = bucketNum.FIRST;
+        switch (newVal){
+            case 0:
+                NewValue = bucketNum.FIRST;
+                break;
+            case 1:
+                NewValue = bucketNum.SECOND;
+                break;
+            case 2:
+                NewValue = bucketNum.THIRD;
+                break;
+            case 3:
+                NewValue = bucketNum.FOURTH;
+                break;
+
+        }
         Log.d(TAG, "91f19 setVariableBucket");
         bucketNum oldValue = bucket;
-        bucket = newValue;
+        bucket = NewValue;
         Log.d(TAG,"91f19 in_setvariable_before "+ bucket.toString());
-        support.firePropertyChange("variableBucket", oldValue, newValue);
+        support.firePropertyChange("variableBucket", oldValue, NewValue);
         Log.d(TAG,"91f19 in_setvariable_after "+ bucket.toString());
     }
 

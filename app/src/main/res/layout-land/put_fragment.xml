@@ -31,6 +31,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="72dp"
         android:text="@string/message_put"
+        android:textAlignment="center"
         android:textSize="44sp"
         android:textColor="@color/put_colorPrimaryDark"
         android:textStyle="bold"

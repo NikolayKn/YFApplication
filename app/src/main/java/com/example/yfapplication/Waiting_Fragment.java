@@ -55,6 +55,7 @@ public class Waiting_Fragment extends Fragment {
                     MainActivity ma = (MainActivity) getActivity();
                     ma.saveText(i);
                 }
+                Data.getInstance().setVariableBucket(i);
             }
 
             @Override

@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         READY,
         PUT
     }
-    modeNum mode = modeNum.WAITING;
+    modeNum mode = modeNum.PUT;
     private static final String TAG = "myLogs";
 
     @Override
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
             String propertyName = event.getPropertyName();
             if ("variableMessage".equals(propertyName)) {
                 Log.d(TAG, "91f19 listener works!");
-                mode = modeNum.WAITING;
+                mode = modeNum.COOKING;
               /*  FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
                 switch (mode){
                     case WAITING:
