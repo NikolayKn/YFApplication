@@ -29,17 +29,14 @@ public class MainActivity extends AppCompatActivity {
     private Cooking_Fragment cooking_fragment = new Cooking_Fragment();
     private Ready_Fragment ready_fragment = new Ready_Fragment();
     private Put_Fragment put_fragment = new Put_Fragment();
+    private FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
     enum modeNum { // Режим
         WAITING,
         COOKING,
         READY,
         PUT
-    };
-    modeNum mode;
-
-
-
-
+    }
+    modeNum mode= modeNum.WAITING;
     private static final String TAG = "myLogs";
 
     @Override
@@ -53,13 +50,34 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.fragment_container, waiting_fragment)
-                .commit();
 
 
-        mode = modeNum.WAITING;
+
+        switch (mode) {
+            case WAITING:
+                mtransaction.add(R.id.fragment_container,waiting_fragment).commit();
+                Log.d(TAG, "91f19 fragment waiting create first time  ");
+
+                break;
+            case COOKING:
+                mtransaction.add(R.id.fragment_container,cooking_fragment).commit();
+
+                break;
+            case READY:
+                mtransaction.add(R.id.fragment_container,ready_fragment).commit();
+
+                break;
+            case PUT:
+                mtransaction.add(R.id.fragment_container,put_fragment).commit();
+
+                break;
+        }
+
+
+
+
+
+
         client = new OkHttpClient();
         Log.d(TAG, "91f19start creating request");
         Request request = new Request.Builder().url("ws://echo.websocket.org").build();
@@ -71,32 +89,32 @@ public class MainActivity extends AppCompatActivity {
 
     public void setData() {
         Log.d(TAG, "91f19 set_text in main");
-        FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
-        switch (Data.getInstance().getmode()) {
+        switch (mode) {
             case WAITING:
-                mtransaction.add(R.id.fragment_container,waiting_fragment).commit();
+                mtransaction.replace(R.id.fragment_container,waiting_fragment).commit();
                 Log.d(TAG, "91f19 add waiting fragment");
                 runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
 
+                        public void run() {
+                            waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
                     }
                 });
 
                 break;
             case COOKING:
-                mtransaction.add(R.id.fragment_container,cooking_fragment).commit();
+                mtransaction.replace(R.id.fragment_container,cooking_fragment).commit();
+                Log.d(TAG, "91f19 add cooking fragment");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
+                        cooking_fragment.fragmentsetText(Data.getInstance().getmessage());
 
                     }
                 });
                 break;
             case READY:
-                mtransaction.add(R.id.fragment_container,ready_fragment).commit();
+                mtransaction.replace(R.id.fragment_container,ready_fragment).commit();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -106,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 break;
             case PUT:
-                mtransaction.add(R.id.fragment_container,put_fragment).commit();
+                mtransaction.replace(R.id.fragment_container,put_fragment).commit();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -160,7 +178,8 @@ public class MainActivity extends AppCompatActivity {
             String propertyName = event.getPropertyName();
             if ("variableMessage".equals(propertyName)) {
                 Log.d(TAG, "91f19 listener works!");
-                FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
+                mode = modeNum.COOKING;
+              /*  FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
                 switch (mode){
                     case WAITING:
                         mtransaction.remove(waiting_fragment).commit();//.commit();
@@ -176,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                     case PUT:
                         mtransaction.remove(put_fragment);//.commit();
                         break;
-                }
+                }*/
                 setData();
             }
             if ("variableBucket".equals(propertyName)){

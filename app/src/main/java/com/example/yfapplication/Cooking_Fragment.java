@@ -25,6 +25,7 @@ public class Cooking_Fragment extends Fragment {
         view = inflater.inflate(R.layout.cooking_fragment, container, false);
         Context context = view.getContext();
         TextView Mes = (TextView) view.findViewById(R.id.message);
+        Mes.setText(Data.getInstance().getmessage());
 
 
         // Адаптер строкового массива для выбора ведра
