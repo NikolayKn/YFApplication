@@ -35,6 +35,11 @@ public class Data {
         return sInstance.message;
 
     }
+
+    public static int getbucket(){
+        return sInstance.bucket.ordinal();
+    }
+
     public static modeNum getmode(){
         return sInstance.mode;
 
@@ -54,7 +59,6 @@ public class Data {
         Log.d(TAG, "91f19 setVariableMessage");
         String oldValue = message;
         message = newValue;
-        Log.d(TAG,"91f19 in_setvariable_before "+ message);
         support.firePropertyChange("variableMessage", oldValue, newValue);
         Log.d(TAG,"91f19 in_setvariable_after "+ message);
     }
@@ -86,7 +90,6 @@ public class Data {
         Log.d(TAG, "91f19 setVariableBucket");
         bucketNum oldValue = bucket;
         bucket = NewValue;
-        Log.d(TAG,"91f19 in_setvariable_before "+ bucket.toString());
         support.firePropertyChange("variableBucket", oldValue, NewValue);
         Log.d(TAG,"91f19 in_setvariable_after "+ bucket.toString());
     }
@@ -103,24 +106,24 @@ public class Data {
                     this.setVariableMode(modeNum.COOKING);
                     //mode = modeNum.COOKING;
                     name = json.getString("name");
-                    ordername = json.getInt("ordername");
-                    mealname = json.getString("mealname");
+                    ordername = json.getInt("orderId");
+                    mealname = json.getString("bowlName");
                     timecooking = json.getInt("timecooking");
                     break;
                 case 2: //Режим готовности блюда (Информация есть)
                     //mode = modeNum.READY;
                     this.setVariableMode(modeNum.READY);
                     name = json.getString("name");
-                    ordername = json.getInt("ordername");
-                    mealname = json.getString("mealname");
+                    ordername = json.getInt("orderId");
+                    mealname = json.getString("bowlName");
                     timecooking = json.getInt("timecooking");
                     break;
                 case 3: // Режим смены тарелки (Информация есть)
                     this.setVariableMode(modeNum.PUT);
                     //mode = modeNum.PUT;
                     name = json.getString("name");
-                    ordername = json.getInt("ordername");
-                    mealname = json.getString("mealname");
+                    ordername = json.getInt("orderId");
+                    mealname = json.getString("bowlName");
                     timecooking = json.getInt("timecooking");
                     break;
             }

@@ -38,8 +38,7 @@ public class Ready_Fragment extends Fragment {
 
         // Установка предыдущего выбора пользователя
         if (getActivity() != null){
-            MainActivity ma = (MainActivity) getActivity();
-            spinner.setSelection(ma.loadText());
+            spinner.setSelection(Data.getInstance().getbucket());
         }
 
 
@@ -48,10 +47,6 @@ public class Ready_Fragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (getActivity() != null) {
-                    MainActivity ma = (MainActivity) getActivity();
-                    ma.saveText(i);
-                }
                 Data.getInstance().setVariableBucket(i);
             }
 

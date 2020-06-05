@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mData = Data.getInstance();
+        loadText();
         myListener = new MyListener();
         mData.addListener(myListener);
         switch (mode) {
@@ -129,34 +130,34 @@ public class MainActivity extends AppCompatActivity {
     // Методы реализуют сохранение и загрузку выбора spinner
 
     // Сохранение
-    void saveText(int number) {
+    void saveText() {
         Log.d(TAG, "91f19 save text in main");
         Log.d(TAG,"91f19 in save_text_in_main "+ mData.getmessage());
         // Объект shared preference
         sPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
         // Сохранение выбора
-        ed.putInt(SAVED_TEXT, number);
+        ed.putInt(SAVED_TEXT, mData.getbucket());
         ed.commit();
 
-        // toast для проверки
-        Toast.makeText(this, "Text saved", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, "bucketId saved", Toast.LENGTH_SHORT).show();
     }
 
     // Загрузка
-    int loadText() {
+    void loadText() {
         Log.d(TAG, "91f19 load text in main");
         sPref = getPreferences(MODE_PRIVATE);
         // Достаем сохраненное ранее значение (По умолчанию - 0)
-        int savedText = sPref.getInt(SAVED_TEXT, 0);
+        mData.setVariableBucket(sPref.getInt(SAVED_TEXT, 0));
         // toast для проверки
-        Toast.makeText(this, "Text loaded", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "bucketId loaded", Toast.LENGTH_SHORT).show();
 
+    }
 
-
-
-        return savedText;
+    @Override
+    protected void onStop() {
+        saveText();
+        super.onStop();
     }
 
     class MyListener implements PropertyChangeListener {
@@ -167,23 +168,6 @@ public class MainActivity extends AppCompatActivity {
             if ("variableMessage".equals(propertyName)) {
                 Log.d(TAG, "91f19 listener works!");
                 mode = modeNum.COOKING;
-              /*  FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
-                switch (mode){
-                    case WAITING:
-                        mtransaction.remove(waiting_fragment).commit();//.commit();
-
-                        Log.d(TAG, "91f19 remove waiting fragment");
-                        break;
-                    case COOKING:
-                        mtransaction.remove(cooking_fragment);//.commit();
-                        break;
-                    case READY:
-                        mtransaction.remove(ready_fragment);//.commit();
-                        break;
-                    case PUT:
-                        mtransaction.remove(put_fragment);//.commit();
-                        break;
-                }*/
                 setData();
             }
             if ("variableBucket".equals(propertyName)){
@@ -191,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
+
 
 
 }
