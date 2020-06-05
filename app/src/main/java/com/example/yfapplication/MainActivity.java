@@ -25,10 +25,10 @@ public class MainActivity extends AppCompatActivity {
     //private static Waiting_Fragment waiting_fragment = new Waiting_Fragment();
     private MyListener myListener;
     private Data mData;
-    private Waiting_Fragment waiting_fragment = new Waiting_Fragment();
-    private Cooking_Fragment cooking_fragment = new Cooking_Fragment();
-    private Ready_Fragment ready_fragment = new Ready_Fragment();
-    private Put_Fragment put_fragment = new Put_Fragment();
+    private FullFragment waiting_fragment = new FullFragment("WAITING");
+    private FullFragment cooking_fragment = new FullFragment("COOKING");
+    private FullFragment ready_fragment = new FullFragment("READY");
+    private FullFragment put_fragment = new FullFragment("PUT");
     private FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
     enum modeNum { // Режим
         WAITING,
@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         READY,
         PUT
     }
-    modeNum mode = modeNum.PUT;
+    modeNum mode = modeNum.WAITING;
     private static final String TAG = "myLogs";
 
     @Override
