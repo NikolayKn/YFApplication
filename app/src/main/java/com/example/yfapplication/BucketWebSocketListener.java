@@ -47,9 +47,6 @@ public final class BucketWebSocketListener extends WebSocketListener {
 
         String message_string = json.toString();
         webSocket.send(message_string);
-        // sendData = obj.toString().getBytes("utf-8");
-       // webSocket.send("Hello, it's the second module!");
-        //webSocket.send(message_bytes);
     }
 
     @Override
@@ -60,10 +57,6 @@ public final class BucketWebSocketListener extends WebSocketListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //mcontext.MainActivity.
-        // MainActivity.setText(text);
-        // Data.addmessage(text);
-        //Data.getInstance().setVariableMessage(text);
     }
 
     @Override
