@@ -34,7 +34,7 @@ public final class BucketWebSocketListener extends WebSocketListener {
         Log.d(TAG, "91f19onOpen");
 
         try {
-            json.put("mode",1);
+            json.put("mode",2);
             json.put("name","nikitos");
             json.put("orderId",112);
             json.put("bowlName","pureshka");
