@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+
 import org.json.*;
 
 import androidx.annotation.Nullable;
@@ -14,7 +15,6 @@ public class Data {
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
     private static Data sInstance;
     private static final String TAG = "myLogs";
-    private String message = "Nothing";
     private bucketNum bucket; // Номер ведра
     private String name; // Имя заказчика
     private int ordername; // Номер заказа
@@ -31,36 +31,33 @@ public class Data {
     }
 
 
-    public static String getmessage(){
-        return sInstance.message;
-
+    public modeNum getMode() {
+        return sInstance.mode;
     }
 
-    public static int getbucket(){
+    public int getbucket() {
         return sInstance.bucket.ordinal();
     }
 
-    public static modeNum getmode(){
-        return sInstance.mode;
 
+    public String getName() {
+        return sInstance.name;
     }
 
+    public int getOrdername() {
+        return sInstance.ordername;
+    }
 
+    public String getMealname() {
+        return sInstance.mealname;
+    }
+
+    public int getTimecooking() {
+        return sInstance.timecooking;
+    }
 
     public void addListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
-    }
-
-    public void removeListener(PropertyChangeListener listener) {
-        support.removePropertyChangeListener(listener);
-    }
-
-    public void setVariableMessage(String newValue) {
-        Log.d(TAG, "91f19 setVariableMessage");
-        String oldValue = message;
-        message = newValue;
-        support.firePropertyChange("variableMessage", oldValue, newValue);
-        Log.d(TAG,"91f19 in_setvariable_after "+ message);
     }
 
     private void setVariableMode(modeNum newValue) {
@@ -72,7 +69,7 @@ public class Data {
 
     public void setVariableBucket(int newVal) {
         bucketNum NewValue = bucketNum.FIRST;
-        switch (newVal){
+        switch (newVal) {
             case 0:
                 NewValue = bucketNum.FIRST;
                 break;
@@ -91,36 +88,31 @@ public class Data {
         bucketNum oldValue = bucket;
         bucket = NewValue;
         support.firePropertyChange("variableBucket", oldValue, NewValue);
-        Log.d(TAG,"91f19 in_setvariable_after "+ bucket.toString());
     }
 
     //Json parser
-    public void JsonParser(JSONObject json){
+    public void JsonParser(JSONObject json) {
         try {
-            switch (json.getInt("mode")){
+            switch (json.getInt("mode")) {
                 case 0: // Режим ожидания заказа (Нет никакой информации)
-                    this.setVariableMode(modeNum.WAITING);
-                    //mode = modeNum.WAITING;
+                    sInstance.setVariableMode(modeNum.WAITING);
                     break;
                 case 1: //Режим готовки блюда (Информация есть)
-                    this.setVariableMode(modeNum.COOKING);
-                    //mode = modeNum.COOKING;
+                    sInstance.setVariableMode(modeNum.COOKING);
                     name = json.getString("name");
                     ordername = json.getInt("orderId");
                     mealname = json.getString("bowlName");
                     timecooking = json.getInt("timecooking");
                     break;
                 case 2: //Режим готовности блюда (Информация есть)
-                    //mode = modeNum.READY;
-                    this.setVariableMode(modeNum.READY);
+                    sInstance.setVariableMode(modeNum.READY);
                     name = json.getString("name");
                     ordername = json.getInt("orderId");
                     mealname = json.getString("bowlName");
                     timecooking = json.getInt("timecooking");
                     break;
                 case 3: // Режим смены тарелки (Информация есть)
-                    this.setVariableMode(modeNum.PUT);
-                    //mode = modeNum.PUT;
+                    sInstance.setVariableMode(modeNum.PUT);
                     name = json.getString("name");
                     ordername = json.getInt("orderId");
                     mealname = json.getString("bowlName");
@@ -128,8 +120,7 @@ public class Data {
                     break;
             }
             Log.d(TAG, "91f19 Updating data by json");
-        }
-        catch (JSONException e){
+        } catch (JSONException e) {
             Log.d(TAG, "91f19 JSON ERROR");
         }
     }

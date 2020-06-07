@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.UnsupportedEncodingException;
+
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -20,6 +22,8 @@ public final class BucketWebSocketListener extends WebSocketListener {
     private Context mcontext;
 
     private static final String TAG = "myLogs";
+    JSONObject json = new JSONObject();
+
 
     BucketWebSocketListener(Context context) {
         this.mcontext = context;
@@ -28,17 +32,38 @@ public final class BucketWebSocketListener extends WebSocketListener {
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
         Log.d(TAG, "91f19onOpen");
-        webSocket.send("Hello, it's the second module!");
+
+        try {
+            json.put("mode",3);
+            json.put("name","nikitos");
+            json.put("orderId",112);
+            json.put("bowlName","pureshka");
+            json.put("timecooking",125);
+            json.put("moduleId",Data.getInstance().getbucket());
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        String message_string = json.toString();
+        webSocket.send(message_string);
+        // sendData = obj.toString().getBytes("utf-8");
+       // webSocket.send("Hello, it's the second module!");
+        //webSocket.send(message_bytes);
     }
 
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         Log.d(TAG, "91f19onMessage");
+        try {
+            Data.getInstance().JsonParser(new JSONObject(text));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         //mcontext.MainActivity.
-        Log.d(TAG, "91f19output");
         // MainActivity.setText(text);
         // Data.addmessage(text);
-        Data.getInstance().setVariableMessage(text);
+        //Data.getInstance().setVariableMessage(text);
     }
 
     @Override

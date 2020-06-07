@@ -20,6 +20,7 @@ public class FullFragment extends Fragment {
     private static final String TAG = "myLogs";
     private final int idFragment;
     private final int idMessage;
+    private final int idSpinner;
 
     public FullFragment(String Mode){
         super();
@@ -27,22 +28,27 @@ public class FullFragment extends Fragment {
             case "WAITING":
                 idFragment = R.layout.waiting_fragment;
                 idMessage = R.id.waiting_message;
+                idSpinner = R.layout.waiting_spinner_item;
                 break;
             case "PUT":
                 idFragment = R.layout.put_fragment;
                 idMessage = R.id.put_message;
+                idSpinner = R.layout.put_spinner_item;
                 break;
             case "READY":
                 idFragment = R.layout.ready_fragment;
                 idMessage = R.id.ready_message;
+                idSpinner = R.layout.ready_spinner_item;
                 break;
             case "COOKING":
                 idFragment = R.layout.cooking_fragment;
                 idMessage = R.id.cooking_message;
+                idSpinner = R.layout.cooking_spinner_item;
                 break;
             default:
                 idFragment = R.layout.waiting_fragment;
                 idMessage = R.id.waiting_message;
+                idSpinner = R.layout.waiting_spinner_item;
                 break;
         }
     }
@@ -57,7 +63,7 @@ public class FullFragment extends Fragment {
 
 
         // Адаптер строкового массива для выбора ведра
-        ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice, R.layout.put_spinner_item);
+        ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice,idSpinner);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         Spinner spinner = view.findViewById(R.id.spinner);
@@ -84,29 +90,19 @@ public class FullFragment extends Fragment {
 
             }
         });
-        ;
+
 
 
         return view;
     }
 
-    public synchronized void fragmentsetText(String item) {
+    public synchronized void fragmentsetData() {
         Log.d(TAG, "91f19 set text in fragment");
         TextView Mes = (TextView) view.findViewById(idMessage);
-        Mes.setText(item);
+
+        Mes.setText(Data.getInstance().getName());
         //getFragmentManager().beginTransaction().detach(this).commit();
         //getFragmentManager().beginTransaction().attach(this).commit();
     }
 
-    @Override
-    public void onDetach() {
-        Log.d(TAG, "91f19 onDetach");
-        super.onDetach();
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        Log.d(TAG, "91f19 onAttach");
-        super.onAttach(context);
-    }
 }

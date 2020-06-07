@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sPref;
     final String SAVED_TEXT = "0";
     private OkHttpClient client;
-    //private static Waiting_Fragment waiting_fragment = new Waiting_Fragment();
     private MyListener myListener;
     private Data mData;
     private FullFragment waiting_fragment = new FullFragment("WAITING");
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         READY,
         PUT
     }
-    modeNum mode = modeNum.WAITING;
+
     private static final String TAG = "myLogs";
 
     @Override
@@ -47,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         loadText();
         myListener = new MyListener();
         mData.addListener(myListener);
-        switch (mode) {
+        switch (Data.getInstance().getMode()) {
             case WAITING:
                 mtransaction.add(R.id.fragment_container,waiting_fragment).commit();
                 Log.d(TAG, "91f19 fragment waiting create first time  ");
@@ -78,15 +77,15 @@ public class MainActivity extends AppCompatActivity {
     public void setData() {
         Log.d(TAG, "91f19 set_text in main");
         final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        switch (mode) {
+        switch (Data.getInstance().getMode()) {
             case WAITING:
                 fragmentTransaction.replace(R.id.fragment_container, waiting_fragment).commit();
                 Log.d(TAG, "91f19 add waiting fragment");
                 runOnUiThread(new Runnable() {
                     @Override
                         public void run() {
-                            fragmentTransaction.replace(R.id.fragment_container, waiting_fragment).commit();
-                            waiting_fragment.fragmentsetText(Data.getInstance().getmessage());
+
+                            waiting_fragment.fragmentsetData();
                     }
                 });
                 break;
@@ -96,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        cooking_fragment.fragmentsetText(Data.getInstance().getmessage());
+                        cooking_fragment.fragmentsetData();
                     }
                 });
                 break;
@@ -106,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ready_fragment.fragmentsetText(Data.getInstance().getmessage());
+                        ready_fragment.fragmentsetData();
 
                     }
                 });
@@ -117,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        put_fragment.fragmentsetText(Data.getInstance().getmessage());
+                        put_fragment.fragmentsetData();
 
                     }
                 });
@@ -132,8 +131,7 @@ public class MainActivity extends AppCompatActivity {
     // Сохранение
     void saveText() {
         Log.d(TAG, "91f19 save text in main");
-        Log.d(TAG,"91f19 in save_text_in_main "+ mData.getmessage());
-        // Объект shared preference
+       // Объект shared preference
         sPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
         // Сохранение выбора
@@ -165,9 +163,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void propertyChange(PropertyChangeEvent event) {
             String propertyName = event.getPropertyName();
-            if ("variableMessage".equals(propertyName)) {
+            if ("variableMode".equals(propertyName)) {
                 Log.d(TAG, "91f19 listener works!");
-                mode = modeNum.COOKING;
                 setData();
             }
             if ("variableBucket".equals(propertyName)){
