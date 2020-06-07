@@ -16,10 +16,10 @@ public class Data {
     private static Data sInstance;
     private static final String TAG = "myLogs";
     private bucketNum bucket; // Номер ведра
-    private String name; // Имя заказчика
-    private int ordername; // Номер заказа
-    private String mealname; // Название блюда
-    private int timecooking; // Время готовки
+    private String name = "default"; // Имя заказчика
+    private int ordername =101; // Номер заказа
+    private String mealname = "default"; // Название блюда
+    private int timecooking = 101; // Время готовки
     private modeNum mode = modeNum.WAITING; // Режим
 
 
@@ -92,37 +92,39 @@ public class Data {
 
     //Json parser
     public void JsonParser(JSONObject json) {
-        try {
-            switch (json.getInt("mode")) {
-                case 0: // Режим ожидания заказа (Нет никакой информации)
-                    sInstance.setVariableMode(modeNum.WAITING);
-                    break;
-                case 1: //Режим готовки блюда (Информация есть)
-                    sInstance.setVariableMode(modeNum.COOKING);
-                    name = json.getString("name");
-                    ordername = json.getInt("orderId");
-                    mealname = json.getString("bowlName");
-                    timecooking = json.getInt("timecooking");
-                    break;
-                case 2: //Режим готовности блюда (Информация есть)
-                    sInstance.setVariableMode(modeNum.READY);
-                    name = json.getString("name");
-                    ordername = json.getInt("orderId");
-                    mealname = json.getString("bowlName");
-                    timecooking = json.getInt("timecooking");
-                    break;
-                case 3: // Режим смены тарелки (Информация есть)
-                    sInstance.setVariableMode(modeNum.PUT);
-                    name = json.getString("name");
-                    ordername = json.getInt("orderId");
-                    mealname = json.getString("bowlName");
-                    timecooking = json.getInt("timecooking");
-                    break;
+
+            try {
+                switch (json.getInt("mode")) {
+                    case 0: // Режим ожидания заказа (Нет никакой информации)
+                        sInstance.setVariableMode(modeNum.WAITING);
+                        break;
+                    case 1: //Режим готовки блюда (Информация есть)
+                        sInstance.setVariableMode(modeNum.COOKING);
+                        name = json.getString("name");
+                        ordername = json.getInt("orderId");
+                        mealname = json.getString("bowlName");
+                        timecooking = json.getInt("timecooking");
+                        break;
+                    case 2: //Режим готовности блюда (Информация есть)
+                        sInstance.setVariableMode(modeNum.READY);
+                        name = json.getString("name");
+                        ordername = json.getInt("orderId");
+                        mealname = json.getString("bowlName");
+                        timecooking = json.getInt("timecooking");
+                        break;
+                    case 3: // Режим смены тарелки (Информация есть)
+                        sInstance.setVariableMode(modeNum.PUT);
+                        name = json.getString("name");
+                        ordername = json.getInt("orderId");
+                        mealname = json.getString("bowlName");
+                        timecooking = json.getInt("timecooking");
+                        break;
+                }
+                Log.d(TAG, "91f19 Updating data by json");
+            } catch (JSONException e) {
+                Log.d(TAG, "91f19 JSON ERROR");
             }
-            Log.d(TAG, "91f19 Updating data by json");
-        } catch (JSONException e) {
-            Log.d(TAG, "91f19 JSON ERROR");
-        }
+
     }
 }
 

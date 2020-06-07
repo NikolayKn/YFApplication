@@ -34,7 +34,7 @@ public final class BucketWebSocketListener extends WebSocketListener {
         Log.d(TAG, "91f19onOpen");
 
         try {
-            json.put("mode",3);
+            json.put("mode",1);
             json.put("name","nikitos");
             json.put("orderId",112);
             json.put("bowlName","pureshka");
@@ -56,10 +56,13 @@ public final class BucketWebSocketListener extends WebSocketListener {
     public void onMessage(WebSocket webSocket, String text) {
         Log.d(TAG, "91f19onMessage");
         try {
-            Data.getInstance().JsonParser(new JSONObject(text));
+            JSONObject json = new JSONObject(text);
+            if (json.getInt("moduleId")==Data.getInstance().getbucket())
+            Data.getInstance().JsonParser(json);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         //mcontext.MainActivity.
         // MainActivity.setText(text);
         // Data.addmessage(text);

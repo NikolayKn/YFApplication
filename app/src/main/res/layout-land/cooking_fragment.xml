@@ -26,11 +26,11 @@
 
     <TextView
 
-        android:id="@+id/cooking_message"
+        android:id="@+id/cooking_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="16dp"
         android:text="@string/message_cooking"
         android:textAlignment="center"
         android:textStyle="bold"
@@ -38,11 +38,63 @@
         android:shadowDx="4"
         android:shadowDy="4"
         android:shadowRadius="6"
-        android:textSize="44sp"
+        android:textSize="32sp"
         android:textColor="@color/cooking_colorPrimaryDark"
         android:background="#00E45801"
 
         />
+
+    <TextView
+        android:id="@+id/meal_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="#meal_name"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:textAlignment="viewStart"
+        android:textStyle="bold"
+        android:shadowColor="@color/cooking_shadowText"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="6"
+        android:textSize="32sp"
+        android:textColor="@color/cooking_colorPrimaryDark"
+        android:background="#00E45801"/>
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="#name"
+        android:layout_marginTop="8dp"
+        android:textAlignment="viewStart"
+        android:layout_marginLeft="16dp"
+        android:textStyle="bold"
+        android:shadowColor="@color/cooking_shadowText"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="6"
+        android:textSize="32sp"
+        android:textColor="@color/cooking_colorPrimaryDark"
+        android:background="#00E45801"/>
+
+    <TextView
+        android:id="@+id/time_cooking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="#time_cooking"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"
+        android:textAlignment="viewStart"
+        android:textStyle="bold"
+        android:shadowColor="@color/cooking_shadowText"
+        android:shadowDx="4"
+        android:shadowDy="4"
+        android:shadowRadius="6"
+        android:textSize="32sp"
+        android:textColor="@color/cooking_colorPrimaryDark"
+        android:background="#00E45801"/>
+
 
 
 </LinearLayout>

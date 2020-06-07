@@ -23,14 +23,14 @@
 
     <TextView
 
-        android:id="@+id/waiting_message"
+        android:id="@+id/waiting_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="70dp"
         android:text="@string/message_waiting"
         android:textColor="@color/waiting_colorPrimaryDark"
-        android:textSize="44sp"
+        android:textSize="32sp"
         android:textStyle="bold"
         android:shadowColor="@color/waiting_shadowText"
         android:shadowDx="4"
