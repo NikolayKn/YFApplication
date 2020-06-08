@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "91f19start creating request");
         Request request = new Request.Builder().url("ws://echo.websocket.org").build();
         BucketWebSocketListener listener = new BucketWebSocketListener(getApplicationContext());
-        WebSocket ws = client.newWebSocket(request, listener);
+        final WebSocket ws = client.newWebSocket(request, listener);
         Log.d(TAG, "91f19 finish creating websocket");
         client.dispatcher().executorService().shutdown();
     }

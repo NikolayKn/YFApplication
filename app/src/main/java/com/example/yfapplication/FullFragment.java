@@ -101,8 +101,10 @@ public class FullFragment extends Fragment {
         }
         if (idTime_cooking!=NULL) {
             TextView Time_cooking = (TextView) view.findViewById(idTime_cooking);
-            String time = Integer.toString(Data.getInstance().getTimecooking());
-            Time_cooking.setText(time);
+            Timer timer = new Timer(Time_cooking, Data.getInstance().getTimecooking());
+            timer.startTimer();
+            //String time = Integer.toString(Data.getInstance().getTimecooking());
+            //Time_cooking.setText(time);
         }
 
 
@@ -161,8 +163,10 @@ public class FullFragment extends Fragment {
         }
         if (idTime_cooking!=NULL) {
             TextView Time_cooking = (TextView) view.findViewById(idTime_cooking);
-            String time = Integer.toString(Data.getInstance().getTimecooking());
-            Time_cooking.setText(time);
+            Timer timer = new Timer(Time_cooking, Data.getInstance().getTimecooking());
+            timer.startTimer();
+            //String time = Integer.toString(Data.getInstance().getTimecooking());
+            //Time_cooking.setText(time);
         }
 
 

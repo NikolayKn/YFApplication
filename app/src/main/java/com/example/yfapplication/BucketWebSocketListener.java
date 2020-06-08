@@ -38,7 +38,7 @@ public final class BucketWebSocketListener extends WebSocketListener {
             json.put("name","nikitos");
             json.put("orderId",112);
             json.put("bowlName","pureshka");
-            json.put("timecooking",125);
+            json.put("timecooking",100);
             json.put("moduleId",Data.getInstance().getbucket());
 
         } catch (JSONException e) {
@@ -47,9 +47,6 @@ public final class BucketWebSocketListener extends WebSocketListener {
 
         String message_string = json.toString();
         webSocket.send(message_string);
-        // sendData = obj.toString().getBytes("utf-8");
-       // webSocket.send("Hello, it's the second module!");
-        //webSocket.send(message_bytes);
     }
 
     @Override
@@ -62,11 +59,6 @@ public final class BucketWebSocketListener extends WebSocketListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        //mcontext.MainActivity.
-        // MainActivity.setText(text);
-        // Data.addmessage(text);
-        //Data.getInstance().setVariableMessage(text);
     }
 
     @Override
