@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         PUT
     }
 
+
     private static final String TAG = "myLogs";
 
     @Override
@@ -67,15 +68,18 @@ public class MainActivity extends AppCompatActivity {
 
         client = new OkHttpClient();
         Log.d(TAG, "91f19start creating request");
-        Request request = new Request.Builder().url("ws://echo.websocket.org").build();
+        Request request = new Request.Builder().url("ws://192.168.43.24:8080/yf").build();
+        //Request request = new Request.Builder().url("wss://echo.websocket.org").build();
         BucketWebSocketListener listener = new BucketWebSocketListener(getApplicationContext());
         final WebSocket ws = client.newWebSocket(request, listener);
         Log.d(TAG, "91f19 finish creating websocket");
+
     }
 
     public void setData() {
         Log.d(TAG, "91f19 set_text in main");
         final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
         switch (Data.getInstance().getMode()) {
             case WAITING:
                 fragmentTransaction.replace(R.id.fragment_container, waiting_fragment).commit();
@@ -127,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         saveText();
+        client.dispatcher().executorService().shutdown();
         super.onStop();
     }
 

@@ -22,7 +22,6 @@ public final class BucketWebSocketListener extends WebSocketListener {
     private Context mcontext;
 
     private static final String TAG = "myLogs";
-    JSONObject json = new JSONObject();
 
 
     BucketWebSocketListener(Context context) {
@@ -32,21 +31,22 @@ public final class BucketWebSocketListener extends WebSocketListener {
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
         Log.d(TAG, "91f19onOpen");
-
+        JSONObject json = new JSONObject();
+        JSONObject dataJson = new JSONObject();
         try {
-            json.put("mode",1);
-            json.put("name","nikitos");
-            json.put("orderId",112);
-            json.put("bowlName","pureshka");
-            json.put("timecooking",15);
-            json.put("moduleId",Data.getInstance().getbucket());
+            json.put("com", "InitModuleLcd");
+            dataJson.put("ModuleId", Data.getInstance().getbucket());
+            //dataJson.put("Mode", 1);
+            //dataJson.put("Name", "Nikolay");
+            //dataJson.put("OrderId", 1223);
+            //dataJson.put("BowlName", "Cesar Salad");
+            //dataJson.put("TimeCooking", 15);
+            json.put("data", dataJson);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-        String message_string = json.toString();
-        webSocket.send(message_string);
+        webSocket.send(json.toString());
     }
 
     @Override
@@ -54,7 +54,7 @@ public final class BucketWebSocketListener extends WebSocketListener {
         Log.d(TAG, "91f19onMessage");
         try {
             JSONObject json = new JSONObject(text);
-            if (json.getInt("moduleId")==Data.getInstance().getbucket())
+            if (json.getJSONObject("data").getInt("ModuleId")==Data.getInstance().getbucket())
             Data.getInstance().JsonParser(json);
         } catch (JSONException e) {
             e.printStackTrace();

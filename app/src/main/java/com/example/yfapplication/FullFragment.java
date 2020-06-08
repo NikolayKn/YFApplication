@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import static java.sql.Types.NULL;
 
@@ -144,13 +145,15 @@ public class FullFragment extends Fragment {
         if (idTime_cooking!=NULL) {
             TextView Time_cooking = (TextView) view.findViewById(idTime_cooking);
             Timer timer = new Timer(Time_cooking, Data.getInstance().getTimecooking());
-            timer.registerCallback(new Timer.Callback() {
-                @Override
-                public void callingBack() {
-                    Log.d(TAG, "91f19 Calling back");
-                    //getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FullFragment("READY")).commit();
-                }
-            });
+            //timer.registerCallback(new Timer.Callback() {
+                //@Override
+                //public void callingBack() {
+                    //Log.d(TAG, "91f19 Calling back");
+                    //FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    //transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+                    //transaction.replace(R.id.fragment_container, new FullFragment("READY")).commit();
+                //}
+            //});
             timer.startTimer();
         }
     }

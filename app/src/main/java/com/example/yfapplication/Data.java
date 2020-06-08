@@ -91,33 +91,33 @@ public class Data {
     }
 
     //Json parser
-    public void JsonParser(JSONObject json) {
-
+    public void JsonParser(JSONObject json_inner) {
             try {
-                switch (json.getInt("mode")) {
+                JSONObject json = json_inner.getJSONObject("data");
+                switch (json.getInt("Mode")) {
                     case 0: // Режим ожидания заказа (Нет никакой информации)
                         sInstance.setVariableMode(modeNum.WAITING);
                         break;
                     case 1: //Режим готовки блюда (Информация есть)
                         sInstance.setVariableMode(modeNum.COOKING);
-                        name = json.getString("name");
-                        ordername = json.getInt("orderId");
-                        mealname = json.getString("bowlName");
-                        timecooking = json.getInt("timecooking");
+                        name = json.getString("Name");
+                        ordername = json.getInt("OrderId");
+                        mealname = json.getString("BowlName");
+                        timecooking = json.getInt("TimeCooking");
                         break;
                     case 2: //Режим готовности блюда (Информация есть)
                         sInstance.setVariableMode(modeNum.READY);
-                        name = json.getString("name");
+                        name = json.getString("Name");
                         ordername = json.getInt("orderId");
-                        mealname = json.getString("bowlName");
-                        timecooking = json.getInt("timecooking");
+                        mealname = json.getString("BowlName");
+                        timecooking = json.getInt("TimeCooking");
                         break;
                     case 3: // Режим смены тарелки (Информация есть)
                         sInstance.setVariableMode(modeNum.PUT);
-                        name = json.getString("name");
-                        ordername = json.getInt("orderId");
-                        mealname = json.getString("bowlName");
-                        timecooking = json.getInt("timecooking");
+                        name = json.getString("Name");
+                        ordername = json.getInt("OrderId");
+                        mealname = json.getString("BowlName");
+                        timecooking = json.getInt("TimeCooking");
                         break;
                 }
                 Log.d(TAG, "91f19 Updating data by json");

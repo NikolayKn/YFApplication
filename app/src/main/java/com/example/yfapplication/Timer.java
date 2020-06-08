@@ -53,7 +53,7 @@ public class Timer {
             public void onFinish() {
                 String time = String.format("Soon");
                 textView.setText(time);
-                callback.callingBack();
+                //callback.callingBack();
             }
         }.start();
     }
