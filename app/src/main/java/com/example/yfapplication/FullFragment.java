@@ -28,6 +28,7 @@ public class FullFragment extends Fragment {
     private final int idTime_cooking;
     private String Mode_text ="Mode_text";
 
+
     public FullFragment(String Mode){
         super();
         switch (Mode){
@@ -87,28 +88,7 @@ public class FullFragment extends Fragment {
         //TextView Mes = (TextView) view.findViewById(idMessage);
         //TextView Mode = (TextView) view.findViewById(idMode);
 
-        if (idMode!=NULL) {
-            TextView Mode = (TextView) view.findViewById(idMode);
-            Mode.setText(Mode_text + Data.getInstance().getOrdername());
-        }
-        if (idMeal_name!=NULL) {
-            TextView Meal_name = (TextView) view.findViewById(idMeal_name);
-            Meal_name.setText(Data.getInstance().getMealname());
-        }
-        if (idName!=NULL) {
-            TextView Name = (TextView) view.findViewById(idName);
-            Name.setText(Data.getInstance().getName());
-        }
-        if (idTime_cooking!=NULL) {
-            TextView Time_cooking = (TextView) view.findViewById(idTime_cooking);
-            Timer timer = new Timer(Time_cooking, Data.getInstance().getTimecooking());
-            timer.startTimer();
-            //String time = Integer.toString(Data.getInstance().getTimecooking());
-            //Time_cooking.setText(time);
-        }
-
-
-
+        fragmentsetData();
 
         // Адаптер строкового массива для выбора ведра
         ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice,idSpinner);
@@ -164,16 +144,15 @@ public class FullFragment extends Fragment {
         if (idTime_cooking!=NULL) {
             TextView Time_cooking = (TextView) view.findViewById(idTime_cooking);
             Timer timer = new Timer(Time_cooking, Data.getInstance().getTimecooking());
+            timer.registerCallback(new Timer.Callback() {
+                @Override
+                public void callingBack() {
+                    Log.d(TAG, "91f19 Calling back");
+                    //getFragmentManager().beginTransaction().replace(R.id.fragment_container, new FullFragment("READY")).commit();
+                }
+            });
             timer.startTimer();
-            //String time = Integer.toString(Data.getInstance().getTimecooking());
-            //Time_cooking.setText(time);
         }
-
-
-
-        //Mes.setText(Data.getInstance().getName());
-        //getFragmentManager().beginTransaction().detach(this).commit();
-        //getFragmentManager().beginTransaction().attach(this).commit();
     }
 
 }

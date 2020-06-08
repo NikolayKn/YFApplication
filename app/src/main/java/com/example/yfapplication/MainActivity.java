@@ -71,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
         BucketWebSocketListener listener = new BucketWebSocketListener(getApplicationContext());
         final WebSocket ws = client.newWebSocket(request, listener);
         Log.d(TAG, "91f19 finish creating websocket");
-        client.dispatcher().executorService().shutdown();
     }
 
     public void setData() {
@@ -81,45 +80,18 @@ public class MainActivity extends AppCompatActivity {
             case WAITING:
                 fragmentTransaction.replace(R.id.fragment_container, waiting_fragment).commit();
                 Log.d(TAG, "91f19 add waiting fragment");
-                runOnUiThread(new Runnable() {
-                    @Override
-                        public void run() {
-
-                            waiting_fragment.fragmentsetData();
-                    }
-                });
                 break;
             case COOKING:
                 Log.d(TAG, "91f19 add cooking fragment");
                 fragmentTransaction.replace(R.id.fragment_container, cooking_fragment).commit();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        cooking_fragment.fragmentsetData();
-                    }
-                });
                 break;
             case READY:
                 Log.d(TAG, "91f19 add ready fragment");
                 fragmentTransaction.replace(R.id.fragment_container,ready_fragment).commit();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        ready_fragment.fragmentsetData();
-
-                    }
-                });
                 break;
             case PUT:
                 Log.d(TAG, "91f19 add put fragment");
                 fragmentTransaction.replace(R.id.fragment_container,put_fragment).commit();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        put_fragment.fragmentsetData();
-
-                    }
-                });
                 break;
         }
     }

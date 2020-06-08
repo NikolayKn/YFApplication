@@ -38,7 +38,7 @@ public final class BucketWebSocketListener extends WebSocketListener {
             json.put("name","nikitos");
             json.put("orderId",112);
             json.put("bowlName","pureshka");
-            json.put("timecooking",100);
+            json.put("timecooking",15);
             json.put("moduleId",Data.getInstance().getbucket());
 
         } catch (JSONException e) {

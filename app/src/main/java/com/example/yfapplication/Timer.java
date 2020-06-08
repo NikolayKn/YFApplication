@@ -13,7 +13,7 @@ public class Timer {
 
     //TODO реализовать callback
     interface Callback{
-        void callingback();
+        void callingBack();
     }
 
     Callback callback;
@@ -51,7 +51,9 @@ public class Timer {
 
             @Override
             public void onFinish() {
-                //callback.callingback();
+                String time = String.format("Soon");
+                textView.setText(time);
+                callback.callingBack();
             }
         }.start();
     }
