@@ -2,6 +2,7 @@
     <string name="app_name">YFApplication</string>
     <string name="app">YFApplication</string>
     <string name="message_waiting">Waiting...</string>
+    <string name="need_charge">Connect charger</string>
     <string name="message_cooking">Cooking\nOrder № </string>
     <string name="message_ready">Ready!\nOrder № </string>
     <string name="message_put">Put new dish</string>

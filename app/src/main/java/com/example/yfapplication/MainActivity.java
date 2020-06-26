@@ -4,7 +4,12 @@ package com.example.yfapplication;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -23,26 +28,37 @@ public class MainActivity extends AppCompatActivity {
     final String SAVED_TEXT = "0";
     private OkHttpClient client;
     private MyListener myListener;
+    private  boolean isChargingNew;
+    private  boolean isChargingOld = false;
     private Data mData;
     private FullFragment waiting_fragment = new FullFragment("WAITING");
     private FullFragment cooking_fragment = new FullFragment("COOKING");
     private FullFragment ready_fragment = new FullFragment("READY");
     private FullFragment put_fragment = new FullFragment("PUT");
     private FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
-    enum modeNum { // Режим
-        WAITING,
-        COOKING,
-        READY,
-        PUT
-    }
-
-
+    private BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int ChargingStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+            isChargingNew = ChargingStatus != BatteryManager.BATTERY_STATUS_DISCHARGING;
+            if (isChargingNew == isChargingOld) return;
+            isChargingOld = isChargingNew;
+            if (!isChargingOld) {
+                Toast.makeText(MainActivity.this, "not charging", Toast.LENGTH_SHORT).show();
+            }
+            else Toast.makeText(MainActivity.this, "charging", Toast.LENGTH_SHORT).show();
+            Log.d("TAG", "91f19 BATTERY: " + isChargingOld);
+        }
+    };
     private static final String TAG = "myLogs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+
         mData = Data.getInstance();
         loadText();
         myListener = new MyListener();
@@ -68,8 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
         client = new OkHttpClient();
         Log.d(TAG, "91f19start creating request");
-        Request request = new Request.Builder().url("ws://192.168.43.24:8080/yf").build();
-        //Request request = new Request.Builder().url("wss://echo.websocket.org").build();
+        //Request request = new Request.Builder().url("ws://192.168.43.24:8080/yf").build();
+        Request request = new Request.Builder().url("wss://echo.websocket.org").build();
         BucketWebSocketListener listener = new BucketWebSocketListener(getApplicationContext());
         final WebSocket ws = client.newWebSocket(request, listener);
         Log.d(TAG, "91f19 finish creating websocket");

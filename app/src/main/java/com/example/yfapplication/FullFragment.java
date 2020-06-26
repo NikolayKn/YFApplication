@@ -1,11 +1,17 @@
 package com.example.yfapplication;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -27,8 +33,8 @@ public class FullFragment extends Fragment {
     private final int idMeal_name;
     private final int idName;
     private final int idTime_cooking;
+    private int animation;
     private String Mode_text ="Mode_text";
-
 
     public FullFragment(String Mode){
         super();
@@ -40,6 +46,7 @@ public class FullFragment extends Fragment {
                 idMeal_name = NULL;
                 idName = NULL;
                 idTime_cooking = NULL;
+                animation = R.anim.alpha_change;
                 break;
             case "PUT":
                 idFragment = R.layout.put_fragment;
@@ -56,7 +63,6 @@ public class FullFragment extends Fragment {
                 idMeal_name = R.id.meal_name;
                 idName = R.id.name;
                 idTime_cooking = NULL;
-               // Mode_text = getResources().getString(R.string.message_ready);
                 Mode_text ="Ready!\nOrder №";
                 break;
             case "COOKING":
@@ -66,7 +72,6 @@ public class FullFragment extends Fragment {
                 idMeal_name = R.id.meal_name;
                 idName = R.id.name;
                 idTime_cooking = R.id.time_cooking;
-                //Mode_text = getContext().getResources().getString(R.string.message_cooking);
                 Mode_text ="Cooking\nOrder №";
 
                 break;
@@ -86,8 +91,6 @@ public class FullFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(idFragment, container, false);
         Context context = view.getContext();
-        //TextView Mes = (TextView) view.findViewById(idMessage);
-        //TextView Mode = (TextView) view.findViewById(idMode);
 
         fragmentsetData();
 
@@ -125,10 +128,24 @@ public class FullFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onPause() {
+        if (animation != NULL){
+            TextView text = (TextView) view.findViewById(R.id.waiting_mode);
+            text.clearAnimation();
+            Log.d(TAG, "91f19 Animation cleared");
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(TAG, "91f19 fragment destroys");
+        super.onDestroy();
+    }
+
     public synchronized void fragmentsetData() {
         Log.d(TAG, "91f19 set text in fragment");
-        //TextView Mes = (TextView) view.findViewById(idMessage);
-
 
         if (idMode!=NULL) {
             TextView Mode = (TextView) view.findViewById(idMode);
@@ -155,6 +172,12 @@ public class FullFragment extends Fragment {
                 //}
             //});
             timer.startTimer();
+        }
+        if (animation != NULL){
+            TextView text = (TextView) view.findViewById(R.id.waiting_mode);
+            Log.d(TAG, "91f19 starting animation");
+            Animation anim = AnimationUtils.loadAnimation(view.getContext(), animation);
+            text.startAnimation(anim);
         }
     }
 
