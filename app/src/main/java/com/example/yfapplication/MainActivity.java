@@ -1,6 +1,7 @@
 
 package com.example.yfapplication;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -11,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.BatteryManager;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,9 +29,10 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sPref;
     final String SAVED_TEXT = "0";
     private OkHttpClient client;
+    private  WebSocket ws;
     private MyListener myListener;
     private  boolean isChargingNew;
-    private  boolean isChargingOld = false;
+    private  boolean isChargingOld = true;
     private Data mData;
     private FullFragment waiting_fragment = new FullFragment("WAITING");
     private FullFragment cooking_fragment = new FullFragment("COOKING");
@@ -45,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
             isChargingOld = isChargingNew;
             if (!isChargingOld) {
                 Toast.makeText(MainActivity.this, "not charging", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(MainActivity.this, ActivityWithoutCharging.class));
+                finish();
             }
-            else Toast.makeText(MainActivity.this, "charging", Toast.LENGTH_SHORT).show();
-            Log.d("TAG", "91f19 BATTERY: " + isChargingOld);
+            Log.d(TAG, "91f19 BATTERY: " + isChargingOld);
         }
     };
     private static final String TAG = "myLogs";
@@ -57,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-
-
         mData = Data.getInstance();
         loadText();
         myListener = new MyListener();
@@ -81,16 +83,16 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
-
         client = new OkHttpClient();
         Log.d(TAG, "91f19start creating request");
         //Request request = new Request.Builder().url("ws://192.168.43.24:8080/yf").build();
         Request request = new Request.Builder().url("wss://echo.websocket.org").build();
         BucketWebSocketListener listener = new BucketWebSocketListener(getApplicationContext());
-        final WebSocket ws = client.newWebSocket(request, listener);
+        ws = client.newWebSocket(request, listener);
         Log.d(TAG, "91f19 finish creating websocket");
 
     }
+
 
     public void setData() {
         Log.d(TAG, "91f19 set_text in main");
@@ -115,8 +117,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
-
 
     // Методы реализуют сохранение и загрузку выбора spinner
 
@@ -146,9 +146,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        Log.d(TAG, "91f19 onStop mainActivity");
         saveText();
         client.dispatcher().executorService().shutdown();
+        ws.close(1000, "No charging");
+        unregisterReceiver(batteryReceiver);
+        mData.removeListener(myListener);
+        //Data.getInstance().setVariableMode(modeNum.WAITING);
         super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG, "91f19 onDestroy mainActivity");
+        Toast.makeText(MainActivity.this, "DESTROY!!!", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "Main destroyed");
+        super.onDestroy();
     }
 
     class MyListener implements PropertyChangeListener {

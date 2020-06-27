@@ -60,7 +60,11 @@ public class Data {
         support.addPropertyChangeListener(listener);
     }
 
-    private void setVariableMode(modeNum newValue) {
+    public void removeListener(PropertyChangeListener listener){
+        support.removePropertyChangeListener(listener);
+    }
+
+    public void setVariableMode(modeNum newValue) {
         Log.d(TAG, "91f19 setVariableMode");
         modeNum oldValue = mode;
         mode = newValue;

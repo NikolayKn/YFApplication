@@ -55,7 +55,7 @@ public final class BucketWebSocketListener extends WebSocketListener {
         try {
             JSONObject json = new JSONObject(text);
             if (json.getJSONObject("data").getInt("ModuleId")==Data.getInstance().getbucket())
-            Data.getInstance().JsonParser(json);
+                Data.getInstance().JsonParser(json);
         } catch (JSONException e) {
             e.printStackTrace();
         }
