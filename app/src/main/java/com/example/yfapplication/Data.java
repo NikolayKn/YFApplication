@@ -88,7 +88,7 @@ public class Data {
                 break;
 
         }
-        Log.d(TAG, "91f19 setVariableBucket");
+        Log.d(TAG, "91f19 setVariableBucket # " + newVal);
         bucketNum oldValue = bucket;
         bucket = NewValue;
         support.firePropertyChange("variableBucket", oldValue, NewValue);
@@ -112,7 +112,7 @@ public class Data {
                     case 2: //Режим готовности блюда (Информация есть)
                         sInstance.setVariableMode(modeNum.READY);
                         name = json.getString("Name");
-                        ordername = json.getInt("orderId");
+                        ordername = json.getInt("OrderId");
                         mealname = json.getString("BowlName");
                         timecooking = json.getInt("TimeCooking");
                         break;
@@ -126,6 +126,7 @@ public class Data {
                 }
                 Log.d(TAG, "91f19 Updating data by json");
             } catch (JSONException e) {
+                e.printStackTrace();
                 Log.d(TAG, "91f19 JSON ERROR");
             }
 

@@ -28,6 +28,7 @@ public class FullFragment extends Fragment {
     View view;
     private static final String TAG = "myLogs";
     private final int idFragment;
+    private Spinner spinner;
     private final int idMode;
     private final int idSpinner;
     private final int idMeal_name;
@@ -98,14 +99,16 @@ public class FullFragment extends Fragment {
         ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice,idSpinner);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        Spinner spinner = view.findViewById(R.id.spinner);
+        spinner = view.findViewById(R.id.spinner);
 
         spinner.setAdapter(Adapter);
         spinner.setPrompt("Title");
 
         // Установка предыдущего выбора пользователя
         if (getActivity() != null){
-            spinner.setSelection(Data.getInstance().getbucket());
+            int bucket = Data.getInstance().getbucket();
+            Log.d(TAG, "91f19 Last chose selected" + bucket);
+            spinner.setSelection(bucket);
         }
 
 
@@ -114,12 +117,13 @@ public class FullFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG, "91f19 Spinner item selected " + i);
                 Data.getInstance().setVariableBucket(i);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
+                Log.d(TAG, "91f19 Nothing selected");
             }
         });
 
@@ -130,12 +134,17 @@ public class FullFragment extends Fragment {
 
     @Override
     public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
         if (animation != NULL){
             TextView text = (TextView) view.findViewById(R.id.waiting_mode);
             text.clearAnimation();
             Log.d(TAG, "91f19 Animation cleared");
         }
-        super.onPause();
     }
 
     @Override

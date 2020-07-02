@@ -4,18 +4,9 @@
     android:layout_height="match_parent"
     android:background="@color/waiting_colorPrimary">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center"
-        android:textColor="@color/waiting_colorPrimaryDark"
-        android:text="YFApplication" />
-
     <Spinner
         android:id="@+id/spinner"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="48dp"
         android:layout_width="160dp"
         android:layout_height="32dp"
         android:layout_gravity="right"
@@ -30,14 +21,15 @@
         android:layout_marginTop="70dp"
         android:text="@string/message_waiting"
         android:textColor="@color/waiting_colorPrimaryDark"
-        android:textSize="32sp"
-        android:textStyle="bold"
+        android:textSize="144px"
+        android:textStyle="normal"
         android:shadowColor="@color/waiting_shadowText"
         android:shadowDx="4"
         android:shadowDy="4"
         android:shadowRadius="6"
 
         />
+
 
 
 </LinearLayout>

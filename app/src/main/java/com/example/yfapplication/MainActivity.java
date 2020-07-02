@@ -16,11 +16,24 @@ import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.neovisionaries.ws.client.HostnameUnverifiedException;
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import okhttp3.OkHttpClient;
-import okhttp3.WebSocket;
 import okhttp3.Request;
 
 
@@ -28,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sPref;
     final String SAVED_TEXT = "0";
-    private OkHttpClient client;
-    private  WebSocket ws;
+    private WebSocketFactory factory;
+    private com.neovisionaries.ws.client.WebSocket ws;
     private MyListener myListener;
     private  boolean isChargingNew;
     private  boolean isChargingOld = true;
@@ -60,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        //registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         mData = Data.getInstance();
         loadText();
         myListener = new MyListener();
@@ -83,13 +96,24 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
-        client = new OkHttpClient();
-        Log.d(TAG, "91f19start creating request");
-        //Request request = new Request.Builder().url("ws://192.168.43.24:8080/yf").build();
-        Request request = new Request.Builder().url("wss://echo.websocket.org").build();
-        BucketWebSocketListener listener = new BucketWebSocketListener(getApplicationContext());
-        ws = client.newWebSocket(request, listener);
-        Log.d(TAG, "91f19 finish creating websocket");
+        try {
+            ExecutorService s = Executors.newSingleThreadExecutor();
+            factory = new WebSocketFactory().setConnectionTimeout(5000);
+            ws = factory.createSocket("ws://192.168.1.100:8080/yf");
+            ws.addListener(new BucketWebSocketListenerTrue());
+            Log.d(TAG, "91f19 Start connection");
+            Future<WebSocket> future = ws.connect(s);
+            future.get();
+            boolean flag = ws.isOpen();
+            Log.d(TAG, "91f19 " + flag);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d(TAG, "91f19 Failed to connect websocket");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -148,12 +172,31 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         Log.d(TAG, "91f19 onStop mainActivity");
         saveText();
-        client.dispatcher().executorService().shutdown();
-        ws.close(1000, "No charging");
-        unregisterReceiver(batteryReceiver);
+        ws.disconnect(1000, "Activity destroyed");
+        //unregisterReceiver(batteryReceiver);
         mData.removeListener(myListener);
         //Data.getInstance().setVariableMode(modeNum.WAITING);
         super.onStop();
+    }
+
+    private void changeBucket(){
+        JSONObject json = new JSONObject();
+        JSONObject dataJson = new JSONObject();
+        try {
+            json.put("com", "InitModuleLcd");
+            dataJson.put("moduleId", Data.getInstance().getbucket() + 1);
+            //dataJson.put("Mode", 2);
+            //dataJson.put("Name", "Nikolay");
+            //dataJson.put("OrderId", 1223);
+            //dataJson.put("BowlName", "Cesar Salad");
+            //dataJson.put("TimeCooking", 15);
+            json.put("data", dataJson);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.d(TAG, "91f19 " + json.toString());
+        ws.sendText(json.toString());
     }
 
     @Override
@@ -174,7 +217,8 @@ public class MainActivity extends AppCompatActivity {
                 setData();
             }
             if ("variableBucket".equals(propertyName)){
-
+                changeBucket();
+                saveText();
             }
         }
     }

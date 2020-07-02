@@ -5,20 +5,9 @@
     android:background="@color/cooking_colorPrimary"
     >
 
-
-    <TextView
-        android:id="@+id/textView"
-        android:textColor="@color/cooking_colorPrimary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/cooking_colorPrimaryDark"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center"
-        android:text="@string/title" />
-
     <Spinner
         android:id="@+id/spinner"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="48dp"
         android:layout_width="160dp"
         android:layout_height="32dp"
         android:layout_gravity="right"
