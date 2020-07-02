@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/put_colorPrimary"
+
+    >
+
+    <TextView
+
+        android:id="@+id/put_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="@string/message_put"
+        android:textAlignment="center"
+        android:textColor="@color/put_textColorPrimary"
+        android:textSize="112sp"
+        android:textStyle="bold" />
+</RelativeLayout>

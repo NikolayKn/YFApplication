@@ -41,7 +41,7 @@ public class FullFragment extends Fragment {
         super();
         switch (Mode){
             case "WAITING":
-                idFragment = R.layout.waiting_fragment;
+                idFragment = R.layout.waiting_mode;
                 idMode = NULL;
                 idSpinner = R.layout.waiting_spinner_item;
                 idMeal_name = NULL;
@@ -141,7 +141,7 @@ public class FullFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (animation != NULL){
-            TextView text = (TextView) view.findViewById(R.id.waiting_mode);
+            TextView text = (TextView) view.findViewById(R.id.waiting);
             text.clearAnimation();
             Log.d(TAG, "91f19 Animation cleared");
         }
@@ -183,7 +183,7 @@ public class FullFragment extends Fragment {
             timer.startTimer();
         }
         if (animation != NULL){
-            TextView text = (TextView) view.findViewById(R.id.waiting_mode);
+            TextView text = (TextView) view.findViewById(R.id.waiting);
             Log.d(TAG, "91f19 starting animation");
             Animation anim = AnimationUtils.loadAnimation(view.getContext(), animation);
             text.startAnimation(anim);
