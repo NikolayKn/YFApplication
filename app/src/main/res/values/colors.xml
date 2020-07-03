@@ -4,25 +4,25 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="waiting_colorPrimary">#3F85FF</color>
-    <color name="waiting_colorPrimaryDark">#0022FF</color>
+    <color name="waiting_colorPrimary">#4B3EDF</color>
+    <color name="waiting_textColorPrimary">#FFFFFF</color>
     <color name="waiting_colorAccent">#9C27B0</color>
-    <color name="waiting_shadowText">#02082C</color>
+    <color name="waiting_shadowText">#A67C00</color>
 
-    <color name="cooking_colorPrimary">#FFA23F</color>
-    <color name="cooking_colorPrimaryDark">#E45801</color>
-    <color name="cooking_colorAccent">#CCFF9D</color>
-    <color name="cooking_shadowText">#712D01</color>
+    <color name="cooking_colorPrimary">#FF6332</color>
+    <color name="cooking_textColorPrimary">#FFFFFF</color>
+    <color name="cooking_textColorAccent">#454545</color>
+    <color name="cooking_colorAccent">#FFFFFF</color>
+    <color name="cooking_shadowText">#132471</color>
 
-    <color name="ready_colorPrimary">#81D36A</color>
-    <color name="ready_colorPrimaryDark">#006904</color>
+    <color name="ready_colorPrimary">#67CE4D</color>
+    <color name="ready_textColorPrimary">#FFFFFF</color>
     <color name="ready_colorAccent">#86F158</color>
-    <color name="ready_shadowText">#012903</color>
+    <color name="ready_shadowText">#A60000</color>
 
-    <color name="put_colorPrimary">#FC3C8F</color>
-    <color name="put_colorPrimaryDark">#B10505</color>
+    <color name="put_colorPrimary">#FFFFFF</color>
+    <color name="put_textColorPrimary">#454545</color>
     <color name="put_colorAccent">#FFE400</color>
-    <color name="put_shadowText">#320101</color>
-
+    <color name="put_shadowText">#504F4E</color>
 
 </resources>

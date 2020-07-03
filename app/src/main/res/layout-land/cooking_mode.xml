@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/cooking_colorPrimary">
+
+
+    <TextView
+        android:id="@+id/cooking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:text="@string/cooking"
+        android:textAlignment="center"
+        android:textSize="80sp"
+        android:textColor="@color/cooking_textColorPrimary"
+
+        />
+
+    <TextView
+        android:id="@+id/cooking_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/cooking"
+        android:layout_marginTop="0dp"
+        android:text="@string/cooking_time"
+        android:textAlignment="center"
+        android:textSize="128sp"
+        android:textColor="@color/cooking_textColorPrimary"
+        android:textStyle="bold"
+
+        />
+
+
+
+    <FrameLayout
+        android:layout_width="416dp"
+        android:background="@drawable/ellipse"
+        android:layout_height="416dp"
+        android:layout_marginTop="-208dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="-208dp"
+
+
+        >
+
+        <TextView
+            android:id="@+id/time_cooking"
+            android:layout_width="208dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="-16dp"
+            android:layout_marginBottom="80dp"
+            android:background="#00E45801"
+            android:layout_gravity="bottom|start"
+            android:textSize="48sp"
+            android:text="1 min\n left"
+            android:textAlignment="textEnd"
+            android:textColor="@color/cooking_textColorAccent"
+            android:textStyle="bold"
+            tools:ignore="RtlCompat" />
+    </FrameLayout>
+
+
+</RelativeLayout>
