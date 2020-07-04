@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/ready_colorPrimary">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="480dp"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="start"
+        android:background="@color/ready_colorPrimary" />
+
+    <TextView
+        android:id="@+id/ready_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:text="@string/ready_heading"
+        android:textAlignment="center"
+        android:textColor="@color/ready_textColorPrimary"
+        android:textSize="80sp"
+        />
+
+    <TextView
+        android:id="@+id/orderID"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ready_heading"
+        android:layout_marginTop="-24dp"
+        android:text="@string/ready_orderID_plug"
+        android:textAlignment="center"
+        android:textColor="@color/ready_textColorPrimary"
+        android:textSize="216sp"
+        android:textStyle="bold"
+        />
+
+</RelativeLayout>

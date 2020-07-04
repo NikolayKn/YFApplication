@@ -5,16 +5,22 @@
     android:background="@color/put_colorPrimary"
 
     >
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="480dp"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="start"
+        android:background="@color/put_colorPrimary" />
 
     <TextView
-
-        android:id="@+id/put_mode"
+        android:id="@+id/put_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:text="@string/message_put"
-        android:textAlignment="center"
-        android:textColor="@color/put_textColorPrimary"
+        android:layout_marginTop="56dp"
+        android:text="@string/put_heading"
         android:textSize="112sp"
-        android:textStyle="bold" />
+        android:textColor="@color/put_textColorPrimary"
+        android:gravity="center_horizontal|top"/>
 </RelativeLayout>

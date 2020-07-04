@@ -29,20 +29,20 @@ public class FullFragment extends Fragment {
     private static final String TAG = "myLogs";
     private final int idFragment;
     private Spinner spinner;
-    private final int idMode;
+    private final int orderID;
     private final int idSpinner;
     private final int idMeal_name;
     private final int idName;
     private final int idTime_cooking;
     private int animation;
-    private String Mode_text ="Mode_text";
+
 
     public FullFragment(String Mode){
         super();
         switch (Mode){
             case "WAITING":
                 idFragment = R.layout.waiting_mode;
-                idMode = NULL;
+                orderID = NULL;
                 idSpinner = R.layout.waiting_spinner_item;
                 idMeal_name = NULL;
                 idName = NULL;
@@ -50,35 +50,33 @@ public class FullFragment extends Fragment {
                 animation = R.anim.alpha_change;
                 break;
             case "PUT":
-                idFragment = R.layout.put_fragment;
-                idMode = NULL;
+                idFragment = R.layout.put_mode;
+                orderID = NULL;
                 idSpinner = R.layout.put_spinner_item;
                 idMeal_name = NULL;
                 idName = NULL;
                 idTime_cooking = NULL;
                 break;
             case "READY":
-                idFragment = R.layout.ready_fragment;
-                idMode = R.id.ready_mode;
+                idFragment = R.layout.ready_mode;
+                orderID = R.id.orderID;
                 idSpinner = R.layout.ready_spinner_item;
-                idMeal_name = R.id.meal_name;
-                idName = R.id.name;
+                idMeal_name = NULL;
+                idName = NULL;
                 idTime_cooking = NULL;
-                Mode_text ="Ready!\nOrder №";
                 break;
             case "COOKING":
-                idFragment = R.layout.cooking_fragment;
-                idMode = R.id.cooking_mode;
+                idFragment = R.layout.cooking_mode;
+                orderID = R.id.orderID;
                 idSpinner = R.layout.cooking_spinner_item;
-                idMeal_name = R.id.meal_name;
-                idName = R.id.name;
-                idTime_cooking = R.id.time_cooking;
-                Mode_text ="Cooking\nOrder №";
+                idMeal_name = NULL;
+                idName = NULL;
+                idTime_cooking = R.id.cooking_time;
 
                 break;
             default:
-                idFragment = R.layout.waiting_fragment;
-                idMode = NULL;
+                idFragment = R.layout.waiting_mode;
+                orderID = NULL;
                 idSpinner = R.layout.waiting_spinner_item;
                 idMeal_name = NULL;
                 idName = NULL;
@@ -93,7 +91,7 @@ public class FullFragment extends Fragment {
         view = inflater.inflate(idFragment, container, false);
         Context context = view.getContext();
 
-        fragmentsetData();
+        fragmentSetData();
 
         // Адаптер строкового массива для выбора ведра
         ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice,idSpinner);
@@ -141,7 +139,7 @@ public class FullFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (animation != NULL){
-            TextView text = (TextView) view.findViewById(R.id.waiting);
+            TextView text = (TextView) view.findViewById(R.id.waiting_heading);
             text.clearAnimation();
             Log.d(TAG, "91f19 Animation cleared");
         }
@@ -153,12 +151,12 @@ public class FullFragment extends Fragment {
         super.onDestroy();
     }
 
-    public synchronized void fragmentsetData() {
+    public synchronized void fragmentSetData() {
         Log.d(TAG, "91f19 set text in fragment");
 
-        if (idMode!=NULL) {
-            TextView Mode = (TextView) view.findViewById(idMode);
-            Mode.setText(Mode_text + Data.getInstance().getOrdername());
+        if (orderID!=NULL) {
+            TextView order = (TextView) view.findViewById(orderID);
+            order.setText(Data.getInstance().getOrdername());
         }
         if (idMeal_name!=NULL) {
             TextView Meal_name = (TextView) view.findViewById(idMeal_name);
@@ -183,7 +181,7 @@ public class FullFragment extends Fragment {
             timer.startTimer();
         }
         if (animation != NULL){
-            TextView text = (TextView) view.findViewById(R.id.waiting);
+            TextView text = (TextView) view.findViewById(R.id.waiting_heading);
             Log.d(TAG, "91f19 starting animation");
             Animation anim = AnimationUtils.loadAnimation(view.getContext(), animation);
             text.startAnimation(anim);

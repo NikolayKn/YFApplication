@@ -1,12 +1,14 @@
 <resources>
     <string name="app_name">YFApplication</string>
     <string name="app">YFApplication</string>
+
+
+
     <string name="message_waiting">Waiting</string>
     <string name="need_charge">Connect charger</string>
     <string name="message_cooking">Cooking\nOrder № </string>
     <string name="message_ready">Ready!\nOrder № </string>
-    <string name="cooking">Cooking</string>
-    <string name="cooking_time">TIME</string>
+
     <string name="ready">Ready</string>
     <string name="Order">###</string>
     <string name="message_put">Put new dish</string>
@@ -15,12 +17,27 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+
+    <string name="waiting_heading">Waiting</string>
+
+    <string name="cooking_heading">Cooking</string>
+    <string name="cooking_orderID_plug">018</string>
+    <string name="cooking_time_plug">1 min\nleft</string>
+    <string name="cooking_time_template"> min\nleft</string>
+
+    <string name="ready_heading">Ready</string>
+    <string name="ready_orderID_plug">#ID</string>
+
+    <string name="put_heading">Put new\nplate</string>
+
+
     <!-- TODO: Remove or change this placeholder text -->
     <string-array name="choice">
-        <item>Первое</item>
-        <item>Второе</item>
-        <item>Третье</item>
-        <item>Четвертое</item>
+        <item>First bowl</item>
+        <item>Second bowl</item>
+        <item>Third bowl</item>
+        <item>Forth bowl</item>
 
     </string-array>
 </resources>

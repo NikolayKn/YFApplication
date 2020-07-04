@@ -1,6 +1,6 @@
 package com.example.yfapplication;
 
-import androidx.lifecycle.ViewModelProviders;
+
 
 import android.os.Bundle;
 
@@ -19,8 +19,8 @@ public class noChargeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.waiting_fragment, container, false);
-        TextView textView = (TextView) view.findViewById(R.id.waiting_mode);
+        view = inflater.inflate(R.layout.waiting_mode, container, false);
+        TextView textView = (TextView) view.findViewById(R.id.waiting_heading);
         textView.setText(R.string.need_charge);
         return view;
     }
