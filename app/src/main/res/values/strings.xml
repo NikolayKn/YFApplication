@@ -30,6 +30,7 @@
     <string name="ready_orderID_plug">#ID</string>
 
     <string name="put_heading">Put new\nplate</string>
+    <string name="time_cooking">1 min\n left</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

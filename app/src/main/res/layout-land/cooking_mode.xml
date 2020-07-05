@@ -39,8 +39,8 @@
         android:background="@drawable/ellipse"
         android:layout_height="416dp"
         android:layout_marginTop="-208dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="-208dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="-208dp"
 
 
         >
@@ -49,12 +49,12 @@
             android:id="@+id/time_cooking"
             android:layout_width="208dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-16dp"
+            android:layout_marginStart="-16dp"
             android:layout_marginBottom="80dp"
             android:background="#00E45801"
             android:layout_gravity="bottom|start"
             android:textSize="48sp"
-            android:text="1 min\n left"
+            android:text="@string/time_cooking"
             android:textAlignment="textEnd"
             android:textColor="@color/cooking_textColorAccent"
             android:textStyle="bold"
