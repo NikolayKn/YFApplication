@@ -1,5 +1,6 @@
 package com.example.yfapplication;
 
+import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
 import android.util.Log;
 import android.widget.TextView;
@@ -34,8 +35,10 @@ public class Timer {
     // Обновление таймера
     public void updateTimer() {
         int minutes = (int) timeLeftInMillsSeconds / 60000;
-        int seconds = (int) timeLeftInMillsSeconds % 60000 / 1000;
-        String time = String.format("Ready in %02d : %02d", minutes, seconds);
+
+        @SuppressLint("DefaultLocale")
+        String time = String.format("%d minutes\n left", minutes);
+
         textView.setText(time);
     }
 
@@ -57,4 +60,5 @@ public class Timer {
             }
         }.start();
     }
+
 }
