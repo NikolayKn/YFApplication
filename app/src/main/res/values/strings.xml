@@ -24,7 +24,7 @@
     <string name="cooking_heading">Cooking</string>
     <string name="cooking_orderID_plug">018</string>
     <string name="cooking_time_plug">1 min\nleft</string>
-    <string name="cooking_time_template"> min\nleft</string>
+    <string name="cooking_time_template">99 min\n left</string>
 
     <string name="ready_heading">Ready</string>
     <string name="ready_orderID_plug">#ID</string>

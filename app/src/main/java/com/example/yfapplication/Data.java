@@ -17,13 +17,13 @@ public class Data {
     private static final String TAG = "myLogs";
     private bucketNum bucket; // Номер ведра
     private String name = "default"; // Имя заказчика
-    private int ordername =101; // Номер заказа
+    private int ordername = 101; // Номер заказа
     private String mealname = "default"; // Название блюда
-    private int timecooking = 101; // Время готовки
+    private int timecooking = 62; // Время готовки
     private modeNum mode = modeNum.WAITING; // Режим
 
 
-    public synchronized static Data getInstance() {
+    synchronized static Data getInstance() {
         if (sInstance == null) {
             sInstance = new Data();
         }
@@ -31,11 +31,11 @@ public class Data {
     }
 
 
-    public modeNum getMode() {
+    modeNum getMode() {
         return sInstance.mode;
     }
 
-    public int getbucket() {
+    int getbucket() {
         return sInstance.bucket.ordinal();
     }
 
@@ -44,34 +44,34 @@ public class Data {
         return sInstance.name;
     }
 
-    public int getOrdername() {
-        return sInstance.ordername;
+    String getOrdername() {
+        return String.valueOf(sInstance.ordername);
     }
 
-    public String getMealname() {
+    String getMealname() {
         return sInstance.mealname;
     }
 
-    public int getTimecooking() {
+    int getTimecooking() {
         return sInstance.timecooking;
     }
 
-    public void addListener(PropertyChangeListener listener) {
+    void addListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
-    public void removeListener(PropertyChangeListener listener){
+    void removeListener(PropertyChangeListener listener){
         support.removePropertyChangeListener(listener);
     }
 
-    public void setVariableMode(modeNum newValue) {
+    private void setVariableMode(modeNum newValue) {
         Log.d(TAG, "91f19 setVariableMode");
         modeNum oldValue = mode;
         mode = newValue;
         support.firePropertyChange("variableMode", oldValue, newValue);
     }
 
-    public void setVariableBucket(int newVal) {
+    void setVariableBucket(int newVal) {
         bucketNum NewValue = bucketNum.FIRST;
         switch (newVal) {
             case 0:
@@ -95,7 +95,7 @@ public class Data {
     }
 
     //Json parser
-    public void JsonParser(JSONObject json_inner) {
+    void JsonParser(JSONObject json_inner) {
             try {
                 JSONObject json = json_inner.getJSONObject("data");
                 switch (json.getInt("Mode")) {

@@ -37,7 +37,7 @@ public class Timer {
         int minutes = (int) timeLeftInMillsSeconds / 60000;
 
         @SuppressLint("DefaultLocale")
-        String time = String.format("%d minutes\n left", minutes);
+        String time = String.format("%d min\n left", minutes + 1);
 
         textView.setText(time);
     }

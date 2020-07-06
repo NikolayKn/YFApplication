@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,16 +30,25 @@ public class FullFragment extends Fragment {
     private static final String TAG = "myLogs";
     private final int idFragment;
     private Spinner spinner;
+    private final String Mode;
     private final int orderID;
     private final int idSpinner;
     private final int idMeal_name;
     private final int idName;
     private final int idTime_cooking;
     private int animation;
+    private View.OnLongClickListener listener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+            Toast.makeText(view.getContext(), "Easter egg!", Toast.LENGTH_LONG).show();
+            return true;
+        }
+    };
 
 
     public FullFragment(String Mode){
         super();
+        this.Mode = Mode;
         switch (Mode){
             case "WAITING":
                 idFragment = R.layout.waiting_mode;
@@ -125,7 +135,10 @@ public class FullFragment extends Fragment {
             }
         });
 
-
+        if(Mode.equals("WAITING")) {
+            TextView waiting = (TextView) view.findViewById(R.id.waiting_heading);
+            waiting.setOnLongClickListener(listener);
+        }
 
         return view;
     }
@@ -187,5 +200,6 @@ public class FullFragment extends Fragment {
             text.startAnimation(anim);
         }
     }
+
 
 }

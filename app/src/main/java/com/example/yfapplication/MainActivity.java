@@ -14,6 +14,8 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.neovisionaries.ws.client.HostnameUnverifiedException;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private MyListener myListener;
     private  boolean isChargingNew;
     private  boolean isChargingOld = true;
+    private  boolean isDebuggingMode = false;
     private Data mData;
     private FullFragment waiting_fragment = new FullFragment("WAITING");
     private FullFragment cooking_fragment = new FullFragment("COOKING");
@@ -68,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
     private static final String TAG = "myLogs";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +101,22 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
+        Button btn = (Button) findViewById(R.id.main_button);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isDebuggingMode){
+
+                }
+            }
+        });
+        setConnection();
+
+    }
+
+
+    // Метод устанавливает соединение с вебсокетом
+    private void setConnection(){
         try {
             ExecutorService s = Executors.newSingleThreadExecutor();
             factory = new WebSocketFactory().setConnectionTimeout(5000);
@@ -114,9 +135,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-
     }
-
 
     public void setData() {
         Log.d(TAG, "91f19 set_text in main");
@@ -175,7 +194,6 @@ public class MainActivity extends AppCompatActivity {
         ws.disconnect(1000, "Activity destroyed");
         //unregisterReceiver(batteryReceiver);
         mData.removeListener(myListener);
-        //Data.getInstance().setVariableMode(modeNum.WAITING);
         super.onStop();
     }
 

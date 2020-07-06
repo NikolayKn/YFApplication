@@ -6,12 +6,20 @@
     android:background="@color/cooking_colorPrimary">
 
 
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_gravity="start"
+        android:background="@color/cooking_colorPrimary" />
+
     <TextView
-        android:id="@+id/cooking"
+        android:id="@+id/cooking_heading"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
-        android:text="@string/cooking"
+        android:layout_marginTop="24dp"
+        android:text="@string/cooking_heading"
         android:textAlignment="center"
         android:textSize="80sp"
         android:textColor="@color/cooking_textColorPrimary"
@@ -19,14 +27,14 @@
         />
 
     <TextView
-        android:id="@+id/cooking_mode"
+        android:id="@+id/orderID"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/cooking"
-        android:layout_marginTop="0dp"
-        android:text="@string/cooking_time"
+        android:layout_below="@+id/cooking_heading"
+        android:layout_marginTop="-24dp"
+        android:text="@string/cooking_orderID_plug"
         android:textAlignment="center"
-        android:textSize="128sp"
+        android:textSize="216sp"
         android:textColor="@color/cooking_textColorPrimary"
         android:textStyle="bold"
 
@@ -35,27 +43,29 @@
 
 
     <FrameLayout
-        android:layout_width="416dp"
+        android:layout_width="320dp"
         android:background="@drawable/ellipse"
-        android:layout_height="416dp"
-        android:layout_marginTop="-208dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="-160dp"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="-208dp"
+        android:layout_marginEnd="-160dp"
 
 
         >
 
         <TextView
-            android:id="@+id/time_cooking"
-            android:layout_width="208dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="-16dp"
-            android:layout_marginBottom="80dp"
+            android:id="@+id/cooking_time"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:layout_marginStart="-4dp"
+            android:layout_marginTop="140dp"
             android:background="#00E45801"
-            android:layout_gravity="bottom|start"
-            android:textSize="48sp"
-            android:text="@string/time_cooking"
+            android:layout_gravity="top|start"
+            android:gravity="center"
             android:textAlignment="textEnd"
+            android:textSize="48sp"
+            android:text="@string/cooking_time_template"
+
             android:textColor="@color/cooking_textColorAccent"
             android:textStyle="bold"
             tools:ignore="RtlCompat" />
