@@ -39,6 +39,13 @@
         <item>Second bowl</item>
         <item>Third bowl</item>
         <item>Forth bowl</item>
-
     </string-array>
+
+    <string-array name="choice_debug">
+        <item>Waiting mode</item>
+        <item>Cooking mode</item>
+        <item>Ready mode</item>
+        <item>Put mode</item>
+    </string-array>
+
 </resources>

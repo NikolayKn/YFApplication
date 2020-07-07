@@ -71,6 +71,25 @@ public class Data {
         support.firePropertyChange("variableMode", oldValue, newValue);
     }
 
+    public void setVariableModeDebug(int i){
+        modeNum value = modeNum.WAITING;
+        switch (i){
+            case 0:
+                value = modeNum.WAITING;
+                break;
+            case 1:
+                value = modeNum.COOKING;
+                break;
+            case 2:
+                value = modeNum.READY;
+                break;
+            case 3:
+                value = modeNum.PUT;
+                break;
+        }
+        setVariableMode(value);
+    }
+
     void setVariableBucket(int newVal) {
         bucketNum NewValue = bucketNum.FIRST;
         switch (newVal) {

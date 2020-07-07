@@ -104,7 +104,10 @@ public class FullFragment extends Fragment {
         fragmentSetData();
 
         // Адаптер строкового массива для выбора ведра
-        ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice,idSpinner);
+        int choice;
+        if (MainActivity.isDebuggingMode) choice = R.array.choice_debug;
+        else choice = R.array.choice;
+        ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, choice, idSpinner);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner = view.findViewById(R.id.spinner);
@@ -113,20 +116,25 @@ public class FullFragment extends Fragment {
         spinner.setPrompt("Title");
 
         // Установка предыдущего выбора пользователя
-        if (getActivity() != null){
+        if (getActivity() != null & !MainActivity.isDebuggingMode){
             int bucket = Data.getInstance().getbucket();
             Log.d(TAG, "91f19 Last chose selected" + bucket);
             spinner.setSelection(bucket);
         }
 
+        if (getActivity() != null & MainActivity.isDebuggingMode){
+            modeNum mode = Data.getInstance().getMode();
+            Log.d(TAG, "91f19 Last chose selected" + mode.ordinal());
+            spinner.setSelection(mode.ordinal());
+        }
 
         // Слушатель спинера
-        // TODO Связь с определённым ведром
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d(TAG, "91f19 Spinner item selected " + i);
-                Data.getInstance().setVariableBucket(i);
+                if (MainActivity.isDebuggingMode) Data.getInstance().setVariableModeDebug(i);
+                else Data.getInstance().setVariableBucket(i);
             }
 
             @Override

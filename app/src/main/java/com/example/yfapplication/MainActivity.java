@@ -41,6 +41,8 @@ import okhttp3.Request;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static boolean isDebuggingMode = false;
+
     SharedPreferences sPref;
     final String SAVED_TEXT = "0";
     private WebSocketFactory factory;
@@ -48,13 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private MyListener myListener;
     private  boolean isChargingNew;
     private  boolean isChargingOld = true;
-    private  boolean isDebuggingMode = false;
     private Data mData;
     private FullFragment waiting_fragment = new FullFragment("WAITING");
     private FullFragment cooking_fragment = new FullFragment("COOKING");
     private FullFragment ready_fragment = new FullFragment("READY");
     private FullFragment put_fragment = new FullFragment("PUT");
-    private FragmentTransaction mtransaction = getSupportFragmentManager().beginTransaction();
     private BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -83,21 +83,22 @@ public class MainActivity extends AppCompatActivity {
         loadText();
         myListener = new MyListener();
         mData.addListener(myListener);
+        FragmentTransaction mTransaction = getSupportFragmentManager().beginTransaction();
         switch (Data.getInstance().getMode()) {
             case WAITING:
-                mtransaction.add(R.id.fragment_container,waiting_fragment).commit();
+                mTransaction.add(R.id.fragment_container,waiting_fragment).commit();
                 Log.d(TAG, "91f19 fragment waiting create first time  ");
                 break;
             case COOKING:
-                mtransaction.add(R.id.fragment_container,cooking_fragment).commit();
+                mTransaction.add(R.id.fragment_container,cooking_fragment).commit();
 
                 break;
             case READY:
-                mtransaction.add(R.id.fragment_container,ready_fragment).commit();
+                mTransaction.add(R.id.fragment_container,ready_fragment).commit();
 
                 break;
             case PUT:
-                mtransaction.add(R.id.fragment_container,put_fragment).commit();
+                mTransaction.add(R.id.fragment_container,put_fragment).commit();
 
                 break;
         }
@@ -106,7 +107,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isDebuggingMode){
-
+                    isDebuggingMode = false;
+                    setConnection();
+                    Toast.makeText(MainActivity.this, "Exiting debugging mode", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    isDebuggingMode = true;
+                    Toast.makeText(MainActivity.this, "Entering debugging mode", Toast.LENGTH_SHORT).show();
+                    closeConnection("Entering debugging mode");
+                    FragmentTransaction mTransaction = getSupportFragmentManager().beginTransaction();
+                    mTransaction.replace(R.id.fragment_container, waiting_fragment);
                 }
             }
         });
@@ -130,11 +140,13 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
             Log.d(TAG, "91f19 Failed to connect websocket");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    private void closeConnection(String reason){
+        ws = ws.disconnect(1000, reason);
     }
 
     public void setData() {
@@ -191,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         Log.d(TAG, "91f19 onStop mainActivity");
         saveText();
-        ws.disconnect(1000, "Activity destroyed");
+        closeConnection("Activity destroyed");
         //unregisterReceiver(batteryReceiver);
         mData.removeListener(myListener);
         super.onStop();
