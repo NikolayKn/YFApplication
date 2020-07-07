@@ -107,6 +107,34 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isDebuggingMode){
+                    switch (mData.getMode()) {
+                        case WAITING:
+                            mData.setVariableModeDebug(1);
+                            Toast.makeText(MainActivity.this, "cooking debugging mode", Toast.LENGTH_SHORT).show();
+                            break;
+                        case COOKING:
+                            mData.setVariableModeDebug(2);
+                            Toast.makeText(MainActivity.this, "ready debugging mode", Toast.LENGTH_SHORT).show();
+                            break;
+                        case READY:
+                            mData.setVariableModeDebug(3);
+                            Toast.makeText(MainActivity.this, "put debugging mode", Toast.LENGTH_SHORT).show();
+                            break;
+                        case PUT:
+                            mData.setVariableModeDebug(0);
+                            Toast.makeText(MainActivity.this, "waiting debugging mode", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+
+                }
+
+            }
+        });
+
+        btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (isDebuggingMode){
                     isDebuggingMode = false;
                     setConnection();
                     Toast.makeText(MainActivity.this, "Exiting debugging mode", Toast.LENGTH_SHORT).show();
@@ -118,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
                     FragmentTransaction mTransaction = getSupportFragmentManager().beginTransaction();
                     mTransaction.replace(R.id.fragment_container, waiting_fragment);
                 }
+
+                return false;
             }
         });
         setConnection();

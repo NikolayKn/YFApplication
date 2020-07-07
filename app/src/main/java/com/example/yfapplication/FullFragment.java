@@ -37,6 +37,7 @@ public class FullFragment extends Fragment {
     private final int idName;
     private final int idTime_cooking;
     private int animation;
+    private boolean firstTime = true;
     private View.OnLongClickListener listener = new View.OnLongClickListener() {
         @Override
         public boolean onLongClick(View view) {
@@ -104,9 +105,7 @@ public class FullFragment extends Fragment {
         fragmentSetData();
 
         // Адаптер строкового массива для выбора ведра
-        int choice;
-        if (MainActivity.isDebuggingMode) choice = R.array.choice_debug;
-        else choice = R.array.choice;
+        int choice = R.array.choice;
         ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, choice, idSpinner);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -116,25 +115,25 @@ public class FullFragment extends Fragment {
         spinner.setPrompt("Title");
 
         // Установка предыдущего выбора пользователя
-        if (getActivity() != null & !MainActivity.isDebuggingMode){
+        if (getActivity() != null ){
             int bucket = Data.getInstance().getbucket();
             Log.d(TAG, "91f19 Last chose selected" + bucket);
             spinner.setSelection(bucket);
         }
 
-        if (getActivity() != null & MainActivity.isDebuggingMode){
-            modeNum mode = Data.getInstance().getMode();
-            Log.d(TAG, "91f19 Last chose selected" + mode.ordinal());
-            spinner.setSelection(mode.ordinal());
-        }
 
         // Слушатель спинера
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d(TAG, "91f19 Spinner item selected " + i);
-                if (MainActivity.isDebuggingMode) Data.getInstance().setVariableModeDebug(i);
-                else Data.getInstance().setVariableBucket(i);
+
+                Data.getInstance().setVariableBucket(i);
+                if(!firstTime){
+                    remove();
+                    firstTime = false;
+                }
+
             }
 
             @Override
@@ -149,6 +148,11 @@ public class FullFragment extends Fragment {
         }
 
         return view;
+    }
+
+    // метод для удаления
+    private void remove(){
+        getFragmentManager().beginTransaction().detach(this).commit();
     }
 
     @Override
