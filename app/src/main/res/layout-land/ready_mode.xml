@@ -5,14 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/ready_colorPrimary">
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="480dp"
-        android:layout_height="64dp"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="start"
-        android:background="@color/ready_colorPrimary" />
-
     <TextView
         android:id="@+id/ready_heading"
         android:layout_width="match_parent"

@@ -5,13 +5,6 @@
     android:background="@color/put_colorPrimary"
 
     >
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="480dp"
-        android:layout_height="64dp"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="start"
-        android:background="@color/put_colorPrimary" />
 
     <TextView
         android:id="@+id/put_heading"

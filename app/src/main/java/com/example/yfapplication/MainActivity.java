@@ -1,32 +1,24 @@
 
 package com.example.yfapplication;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.BatteryManager;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.neovisionaries.ws.client.HostnameUnverifiedException;
 import com.neovisionaries.ws.client.WebSocket;
-import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 
 import org.json.JSONException;
@@ -36,14 +28,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,35 +38,16 @@ public class MainActivity extends AppCompatActivity {
 
     SharedPreferences sPref;
     final String SAVED_TEXT = "0";
-    private WebSocketFactory factory;
     private com.neovisionaries.ws.client.WebSocket ws;
     private MyListener myListener;
-    private  boolean isChargingNew;
-    private  boolean isChargingOld = true;
     private boolean isCreate = true;
     private Data mData;
     private FullFragment waiting_fragment = new FullFragment("WAITING");
     private FullFragment cooking_fragment = new FullFragment("COOKING");
     private FullFragment ready_fragment = new FullFragment("READY");
     private FullFragment put_fragment = new FullFragment("PUT");
-    private BroadcastReceiver batteryReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int ChargingStatus = intent.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-            isChargingNew = ChargingStatus != BatteryManager.BATTERY_STATUS_DISCHARGING;
-            if (isChargingNew == isChargingOld) return;
-            isChargingOld = isChargingNew;
-            if (!isChargingOld) {
-                Toast.makeText(MainActivity.this, "not charging", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, ActivityWithoutCharging.class));
-                finish();
-            }
-            Log.d(TAG, "91f19 BATTERY: " + isChargingOld);
-        }
-    };
     private static final String TAG = "myLogs";
 
-    private Spinner spinner;
     void turnOff() {
         Log.d(TAG, "91f19 mainActivity_turnOff");
         if (mData.isChargingStatus()) {
@@ -103,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(this, R.array.choice, R.layout.spinner_item);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner = findViewById(R.id.spinner_main);
+        Spinner spinner = findViewById(R.id.spinner_main);
 
         spinner.setAdapter(Adapter);
         spinner.setPrompt("Title");
@@ -129,27 +97,27 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction mTransaction = getSupportFragmentManager().beginTransaction();
         switch (Data.getInstance().getMode()) {
             case WAITING:
-                mTransaction.add(R.id.fragment_container,waiting_fragment).commit();
+                mTransaction.add(R.id.fragment_container, waiting_fragment).commit();
                 Log.d(TAG, "91f19 fragment waiting create first time  ");
                 break;
             case COOKING:
-                mTransaction.add(R.id.fragment_container,cooking_fragment).commit();
+                mTransaction.add(R.id.fragment_container, cooking_fragment).commit();
 
                 break;
             case READY:
-                mTransaction.add(R.id.fragment_container,ready_fragment).commit();
+                mTransaction.add(R.id.fragment_container, ready_fragment).commit();
 
                 break;
             case PUT:
-                mTransaction.add(R.id.fragment_container,put_fragment).commit();
+                mTransaction.add(R.id.fragment_container, put_fragment).commit();
 
                 break;
         }
-        Button btn = (Button) findViewById(R.id.main_button);
+        Button btn = findViewById(R.id.main_button);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isDebuggingMode) return;
+                if (!isDebuggingMode) return;
                 switch (mData.getMode()) {
                     case WAITING:
                         mData.setVariableModeDebug(1);
@@ -173,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                if (isDebuggingMode){
+                if (isDebuggingMode) {
                     isDebuggingMode = false;
                     setConnection();
                     Toast.makeText(MainActivity.this, "Exiting debugging mode", Toast.LENGTH_SHORT).show();
@@ -188,22 +156,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         // Загрузка состояния зарядки при запуске приложения
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = getApplicationContext().registerReceiver(null, ifilter);
+        Intent batteryStatus = getApplicationContext().registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        assert batteryStatus != null;
         int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
         boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING;
         mData.setPhoneStatus(isCharging);
+
+        //Установление соединения с вебсокетом
         setConnection();
     }
-
 
 
     @Override
     protected void onStart() {
         Log.d(TAG, "91f19 onStart");
         mData.addListener(myListener);
-        if(isCreate) isCreate = false;
-        else{
+        if (isCreate) isCreate = false;
+        else {
             try {
                 recreateConnection();
             } catch (IOException | ExecutionException | InterruptedException e) {
@@ -215,11 +184,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Метод устанавливает соединение с вебсокетом
-    private void setConnection(){
+    private void setConnection() {
         try {
             ExecutorService s = Executors.newSingleThreadExecutor();
             Log.d(TAG, "91f19 Start connection");
-            factory = new WebSocketFactory().setConnectionTimeout(3000);
+            WebSocketFactory factory = new WebSocketFactory().setConnectionTimeout(3000);
             ws = factory.createSocket("ws://192.168.1.100:8080/yf");
             ws.addListener(new BucketWebSocketListenerTrue());
             Future<WebSocket> future = ws.connect(s);
@@ -242,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         future.get();
     }
 
-    private void closeConnection(String reason){
+    private void closeConnection(String reason) {
         ws.disconnect(1000, reason);
     }
 
@@ -261,11 +230,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case READY:
                 Log.d(TAG, "91f19 add ready fragment");
-                fragmentTransaction.replace(R.id.fragment_container,ready_fragment).commit();
+                fragmentTransaction.replace(R.id.fragment_container, ready_fragment).commit();
                 break;
             case PUT:
                 Log.d(TAG, "91f19 add put fragment");
-                fragmentTransaction.replace(R.id.fragment_container,put_fragment).commit();
+                fragmentTransaction.replace(R.id.fragment_container, put_fragment).commit();
                 break;
         }
     }
@@ -312,11 +281,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             json.put("com", "ChangeModuleLcd");
             dataJson.put("moduleId", Data.getInstance().getbucket() + 1);
-            //dataJson.put("Mode", 2);
-            //dataJson.put("Name", "Nikolay");
-            //dataJson.put("OrderId", 1223);
-            //dataJson.put("BowlName", "Cesar Salad");
-            //dataJson.put("TimeCooking", 15);
             json.put("data", dataJson);
 
         } catch (JSONException e) {
@@ -326,13 +290,6 @@ public class MainActivity extends AppCompatActivity {
         ws.sendText(json.toString());
     }
 
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "91f19 onDestroy mainActivity");
-        Toast.makeText(MainActivity.this, "DESTROY!!!", Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "Main destroyed");
-        super.onDestroy();
-    }
 
     class MyListener implements PropertyChangeListener {
 

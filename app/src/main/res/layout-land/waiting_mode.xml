@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/waiting_colorPrimary">
 
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="64dp"
-        android:layout_alignParentTop="true"
-        android:layout_gravity="start"
-        android:background="@color/waiting_colorPrimary" />
-
     <TextView
         android:id="@+id/waiting_heading"
         android:longClickable="true"
