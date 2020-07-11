@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private FullFragment ready_fragment = new FullFragment("READY");
     private FullFragment put_fragment = new FullFragment("PUT");
     private static final String TAG = "myLogs";
+    private boolean isCharging;
 
     void turnOff() {
         Log.d(TAG, "91f19 mainActivity_turnOff");
@@ -64,12 +65,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mData = Data.getInstance();
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mData = Data.getInstance();
+
         loadText();
         ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(this, R.array.choice, R.layout.spinner_item);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
 
         Spinner spinner = findViewById(R.id.spinner_main);
 
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         int bucket = mData.getBucket();
         Log.d(TAG, "91f19 Last chose selected " + bucket);
         spinner.setSelection(bucket);
-
+        myListener = new MyListener();
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -93,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        myListener = new MyListener();
         FragmentTransaction mTransaction = getSupportFragmentManager().beginTransaction();
         switch (Data.getInstance().getMode()) {
             case WAITING:
@@ -155,12 +159,16 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+
+
         // Загрузка состояния зарядки при запуске приложения
-        Intent batteryStatus = getApplicationContext().registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = getApplicationContext().registerReceiver(null, filter);
         assert batteryStatus != null;
         int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING;
-        mData.setPhoneStatus(isCharging);
+        isCharging = (status == BatteryManager.BATTERY_STATUS_CHARGING);
+        Log.d(TAG, "91f19 get start charging status " + isCharging);
+        //mData.setPhoneStatus(isCharging);
 
         //Установление соединения с вебсокетом
         setConnection();
@@ -169,8 +177,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        Log.d(TAG, "91f19 onStart");
-        mData.addListener(myListener);
+        super.onStart();
+        Data.getInstance().addListener(myListener);
+
         if (isCreate) isCreate = false;
         else {
             try {
@@ -179,7 +188,9 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        super.onStart();
+        Log.d(TAG, "91f19 onStart");
+
+        Data.getInstance().setPhoneStatus(isCharging);
     }
 
 
@@ -305,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
                 saveText();
             }
             if ("PhoneStatus".equals(propertyName)) {
+                Log.d(TAG, "91f19 listener works!_phoneStatus");
                 turnOff();
             }
         }
