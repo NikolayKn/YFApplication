@@ -37,6 +37,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"> </action>
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"> </action>
+            </intent-filter>
         </receiver>
 
     </application>
