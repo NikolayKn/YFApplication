@@ -29,7 +29,7 @@ public class FullFragment extends Fragment {
     View view;
     private static final String TAG = "myLogs";
     private final int idFragment;
-    private Spinner spinner;
+    //private Spinner spinner;
     private final String Mode;
     private final int orderID;
     private final int idSpinner;
@@ -104,10 +104,7 @@ public class FullFragment extends Fragment {
         fragmentSetData();
 
         // Адаптер строкового массива для выбора ведра
-        int choice;
-        if (MainActivity.isDebuggingMode) choice = R.array.choice_debug;
-        else choice = R.array.choice;
-        ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, choice, idSpinner);
+        /*ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(context, R.array.choice, idSpinner);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner = view.findViewById(R.id.spinner);
@@ -116,32 +113,26 @@ public class FullFragment extends Fragment {
         spinner.setPrompt("Title");
 
         // Установка предыдущего выбора пользователя
-        if (getActivity() != null & !MainActivity.isDebuggingMode){
+        if (getActivity() != null){
             int bucket = Data.getInstance().getbucket();
-            Log.d(TAG, "91f19 Last chose selected" + bucket);
+            Log.d(TAG, "91f19 Last chose selected " + bucket);
             spinner.setSelection(bucket);
         }
 
-        if (getActivity() != null & MainActivity.isDebuggingMode){
-            modeNum mode = Data.getInstance().getMode();
-            Log.d(TAG, "91f19 Last chose selected" + mode.ordinal());
-            spinner.setSelection(mode.ordinal());
-        }
 
         // Слушатель спинера
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.d(TAG, "91f19 Spinner item selected " + i);
-                if (MainActivity.isDebuggingMode) Data.getInstance().setVariableModeDebug(i);
-                else Data.getInstance().setVariableBucket(i);
+                Data.getInstance().setVariableBucket(i);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 Log.d(TAG, "91f19 Nothing selected");
             }
-        });
+        });*/
 
         if(Mode.equals("WAITING")) {
             TextView waiting = (TextView) view.findViewById(R.id.waiting_heading);
@@ -152,8 +143,14 @@ public class FullFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onStart() {
+        super.onStart();
+        if (animation != NULL){
+            TextView text = (TextView) view.findViewById(R.id.waiting_heading);
+            Log.d(TAG, "91f19 starting animation");
+            Animation anim = AnimationUtils.loadAnimation(view.getContext(), animation);
+            text.startAnimation(anim);
+        }
     }
 
     @Override
@@ -200,12 +197,6 @@ public class FullFragment extends Fragment {
                 //}
             //});
             timer.startTimer();
-        }
-        if (animation != NULL){
-            TextView text = (TextView) view.findViewById(R.id.waiting_heading);
-            Log.d(TAG, "91f19 starting animation");
-            Animation anim = AnimationUtils.loadAnimation(view.getContext(), animation);
-            text.startAnimation(anim);
         }
     }
 

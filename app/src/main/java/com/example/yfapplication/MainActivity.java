@@ -15,7 +15,11 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.neovisionaries.ws.client.HostnameUnverifiedException;
@@ -43,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean isDebuggingMode = false;
 
+    public final static String TEST_INTENT_FILTER = "com.example.action.ACTION_TEST";
+
     SharedPreferences sPref;
     final String SAVED_TEXT = "0";
     private WebSocketFactory factory;
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private MyListener myListener;
     private  boolean isChargingNew;
     private  boolean isChargingOld = true;
+    private boolean isCreate = true;
     private Data mData;
     private FullFragment waiting_fragment = new FullFragment("WAITING");
     private FullFragment cooking_fragment = new FullFragment("COOKING");
@@ -72,17 +79,45 @@ public class MainActivity extends AppCompatActivity {
     };
     private static final String TAG = "myLogs";
 
+    private Spinner spinner;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
         mData = Data.getInstance();
         loadText();
+        //registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+
+        ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(this, R.array.choice, R.layout.spinner_item);
+        Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner = findViewById(R.id.spinner_main);
+
+        spinner.setAdapter(Adapter);
+        spinner.setPrompt("Title");
+
+        int bucket = mData.getInstance().getbucket();
+        Log.d(TAG, "91f19 Last chose selected " + bucket);
+        spinner.setSelection(bucket);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG, "91f19 Spinner item selected " + i);
+                Data.getInstance().setVariableBucket(i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
         myListener = new MyListener();
-        mData.addListener(myListener);
         FragmentTransaction mTransaction = getSupportFragmentManager().beginTransaction();
         switch (Data.getInstance().getMode()) {
             case WAITING:
@@ -106,6 +141,30 @@ public class MainActivity extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(!isDebuggingMode) return;
+                switch (mData.getMode()) {
+                    case WAITING:
+                        mData.setVariableModeDebug(1);
+                        Toast.makeText(MainActivity.this, "cooking debugging mode", Toast.LENGTH_SHORT).show();
+                        break;
+                    case COOKING:
+                        mData.setVariableModeDebug(2);
+                        Toast.makeText(MainActivity.this, "ready debugging mode", Toast.LENGTH_SHORT).show();
+                        break;
+                    case READY:
+                        mData.setVariableModeDebug(3);
+                        Toast.makeText(MainActivity.this, "put debugging mode", Toast.LENGTH_SHORT).show();
+                        break;
+                    case PUT:
+                        mData.setVariableModeDebug(0);
+                        Toast.makeText(MainActivity.this, "waiting debugging mode", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
+        btn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
                 if (isDebuggingMode){
                     isDebuggingMode = false;
                     setConnection();
@@ -118,10 +177,27 @@ public class MainActivity extends AppCompatActivity {
                     FragmentTransaction mTransaction = getSupportFragmentManager().beginTransaction();
                     mTransaction.replace(R.id.fragment_container, waiting_fragment);
                 }
+                return true;
             }
         });
         setConnection();
+    }
 
+
+
+    @Override
+    protected void onStart() {
+        Log.d(TAG, "91f19 onStart");
+        mData.addListener(myListener);
+        if(isCreate) isCreate = false;
+        else{
+            try {
+                recreateConnection();
+            } catch (IOException | ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        super.onStart();
     }
 
 
@@ -129,10 +205,10 @@ public class MainActivity extends AppCompatActivity {
     private void setConnection(){
         try {
             ExecutorService s = Executors.newSingleThreadExecutor();
-            factory = new WebSocketFactory().setConnectionTimeout(5000);
+            Log.d(TAG, "91f19 Start connection");
+            factory = new WebSocketFactory().setConnectionTimeout(3000);
             ws = factory.createSocket("ws://192.168.1.100:8080/yf");
             ws.addListener(new BucketWebSocketListenerTrue());
-            Log.d(TAG, "91f19 Start connection");
             Future<WebSocket> future = ws.connect(s);
             future.get();
             boolean flag = ws.isOpen();
@@ -145,8 +221,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void recreateConnection() throws IOException, ExecutionException, InterruptedException {
+        ExecutorService s = Executors.newSingleThreadExecutor();
+        Log.d(TAG, "91f19 Start connection");
+        ws = ws.recreate();
+        Future<WebSocket> future = ws.connect(s);
+        future.get();
+    }
+
     private void closeConnection(String reason){
-        ws = ws.disconnect(1000, reason);
+        ws.disconnect(1000, reason);
     }
 
     public void setData() {
@@ -213,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
         JSONObject json = new JSONObject();
         JSONObject dataJson = new JSONObject();
         try {
-            json.put("com", "InitModuleLcd");
+            json.put("com", "ChangeModuleLcd");
             dataJson.put("moduleId", Data.getInstance().getbucket() + 1);
             //dataJson.put("Mode", 2);
             //dataJson.put("Name", "Nikolay");

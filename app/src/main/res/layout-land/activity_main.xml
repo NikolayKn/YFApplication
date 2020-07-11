@@ -14,12 +14,19 @@
         android:layout_height="match_parent"
         >
 
+        <Spinner
+            android:id="@+id/spinner_main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null" />
+
         <Button
             android:id="@+id/main_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:clickable="true"
+            android:longClickable="true"
             android:background="@null"
             android:focusable="true" />
 
