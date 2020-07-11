@@ -21,6 +21,7 @@ public class Data {
     private String mealname = "default"; // Название блюда
     private int timecooking = 62; // Время готовки
     private modeNum mode = modeNum.WAITING; // Режим
+    private boolean chargingStatus = true; //Состояние зарядки телефона
 
 
     synchronized static Data getInstance() {
@@ -69,6 +70,17 @@ public class Data {
         modeNum oldValue = mode;
         mode = newValue;
         support.firePropertyChange("variableMode", oldValue, newValue);
+    }
+
+    public boolean isChargingStatus() {
+        return chargingStatus;
+    }
+
+    public void setPhoneStatus(boolean newValue) {
+        Log.d(TAG, "91f19 setPhoneStatus");
+        boolean oldValue = chargingStatus;
+        chargingStatus = newValue;
+        support.firePropertyChange("PhoneStatus", oldValue, newValue);
     }
 
     public void setVariableModeDebug(int i){

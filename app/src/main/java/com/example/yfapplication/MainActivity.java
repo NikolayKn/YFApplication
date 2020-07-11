@@ -15,6 +15,8 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static boolean isDebuggingMode = false;
 
-    public final static String TEST_INTENT_FILTER = "com.example.action.ACTION_TEST";
-
     SharedPreferences sPref;
     final String SAVED_TEXT = "0";
     private WebSocketFactory factory;
@@ -80,18 +80,26 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "myLogs";
 
     private Spinner spinner;
-
+    void turnOff() {
+        Log.d(TAG, "91f19 mainActivity_turnOff");
+        if (mData.isChargingStatus()) {
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.screenBrightness = -1;
+            getWindow().setAttributes(params);
+        } else {
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.screenBrightness = 0;
+            getWindow().setAttributes(params);
+        }
+    }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mData = Data.getInstance();
         loadText();
-        //registerReceiver(batteryReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
-
         ArrayAdapter<CharSequence> Adapter = ArrayAdapter.createFromResource(this, R.array.choice, R.layout.spinner_item);
         Adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -169,8 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     isDebuggingMode = false;
                     setConnection();
                     Toast.makeText(MainActivity.this, "Exiting debugging mode", Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     isDebuggingMode = true;
                     Toast.makeText(MainActivity.this, "Entering debugging mode", Toast.LENGTH_SHORT).show();
                     closeConnection("Entering debugging mode");
@@ -180,6 +187,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        // Загрузка состояния зарядки при запуске приложения
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = getApplicationContext().registerReceiver(null, ifilter);
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING;
+        mData.setPhoneStatus(isCharging);
         setConnection();
     }
 
@@ -262,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
     // Сохранение
     void saveText() {
         Log.d(TAG, "91f19 save text in main");
-       // Объект shared preference
+        // Объект shared preference
         sPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
         // Сохранение выбора
@@ -293,7 +306,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
 
-    private void changeBucket(){
+    private void changeBucket() {
         JSONObject json = new JSONObject();
         JSONObject dataJson = new JSONObject();
         try {
@@ -330,14 +343,15 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "91f19 listener works!");
                 setData();
             }
-            if ("variableBucket".equals(propertyName)){
+            if ("variableBucket".equals(propertyName)) {
                 changeBucket();
                 saveText();
             }
+            if ("PhoneStatus".equals(propertyName)) {
+                turnOff();
+            }
         }
     }
-
-
 
 
 }
