@@ -1,10 +1,5 @@
 package com.example.yfapplication;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.BatteryManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,26 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import static java.sql.Types.NULL;
 
 public class FullFragment extends Fragment {
-    View view;
+    private View view;
     private static final String TAG = "myLogs";
     private final int idFragment;
     private final String Mode;
     private final int orderID;
-    private final int idSpinner;
     private final int idMeal_name;
     private final int idName;
     private final int idTime_cooking;
@@ -45,14 +35,13 @@ public class FullFragment extends Fragment {
     };
 
 
-    public FullFragment(String Mode){
+    FullFragment(String Mode) {
         super();
         this.Mode = Mode;
-        switch (Mode){
+        switch (Mode) {
             case "WAITING":
                 idFragment = R.layout.waiting_mode;
                 orderID = NULL;
-                idSpinner = R.layout.waiting_spinner_item;
                 idMeal_name = NULL;
                 idName = NULL;
                 idTime_cooking = NULL;
@@ -61,7 +50,6 @@ public class FullFragment extends Fragment {
             case "PUT":
                 idFragment = R.layout.put_mode;
                 orderID = NULL;
-                idSpinner = R.layout.put_spinner_item;
                 idMeal_name = NULL;
                 idName = NULL;
                 idTime_cooking = NULL;
@@ -69,7 +57,6 @@ public class FullFragment extends Fragment {
             case "READY":
                 idFragment = R.layout.ready_mode;
                 orderID = R.id.orderID;
-                idSpinner = R.layout.ready_spinner_item;
                 idMeal_name = NULL;
                 idName = NULL;
                 idTime_cooking = NULL;
@@ -77,7 +64,6 @@ public class FullFragment extends Fragment {
             case "COOKING":
                 idFragment = R.layout.cooking_mode;
                 orderID = R.id.orderID;
-                idSpinner = R.layout.cooking_spinner_item;
                 idMeal_name = NULL;
                 idName = NULL;
                 idTime_cooking = R.id.cooking_time;
@@ -86,7 +72,6 @@ public class FullFragment extends Fragment {
             default:
                 idFragment = R.layout.waiting_mode;
                 orderID = NULL;
-                idSpinner = R.layout.waiting_spinner_item;
                 idMeal_name = NULL;
                 idName = NULL;
                 idTime_cooking = NULL;
@@ -98,12 +83,11 @@ public class FullFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(idFragment, container, false);
-        Context context = view.getContext();
 
         fragmentSetData();
 
-        if(Mode.equals("WAITING")) {
-            TextView waiting = (TextView) view.findViewById(R.id.waiting_heading);
+        if (Mode.equals("WAITING")) {
+            TextView waiting = view.findViewById(R.id.waiting_heading);
             waiting.setOnLongClickListener(listener);
         }
 
@@ -113,8 +97,8 @@ public class FullFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (animation != NULL){
-            TextView text = (TextView) view.findViewById(R.id.waiting_heading);
+        if (animation != NULL) {
+            TextView text = view.findViewById(R.id.waiting_heading);
             Log.d(TAG, "91f19 starting animation");
             Animation anim = AnimationUtils.loadAnimation(view.getContext(), animation);
             text.startAnimation(anim);
@@ -124,8 +108,8 @@ public class FullFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (animation != NULL){
-            TextView text = (TextView) view.findViewById(R.id.waiting_heading);
+        if (animation != NULL) {
+            TextView text = view.findViewById(R.id.waiting_heading);
             text.clearAnimation();
             Log.d(TAG, "91f19 Animation cleared");
         }
@@ -137,32 +121,32 @@ public class FullFragment extends Fragment {
         super.onDestroy();
     }
 
-    public synchronized void fragmentSetData() {
+    private synchronized void fragmentSetData() {
         Log.d(TAG, "91f19 set text in fragment");
 
-        if (orderID!=NULL) {
-            TextView order = (TextView) view.findViewById(orderID);
-            order.setText(Data.getInstance().getOrdername());
+        if (orderID != NULL) {
+            TextView order = view.findViewById(orderID);
+            order.setText(Data.getInstance().getOrderName());
         }
-        if (idMeal_name!=NULL) {
-            TextView Meal_name = (TextView) view.findViewById(idMeal_name);
-            Meal_name.setText(Data.getInstance().getMealname());
+        if (idMeal_name != NULL) {
+            TextView Meal_name = view.findViewById(idMeal_name);
+            Meal_name.setText(Data.getInstance().getMealName());
         }
-        if (idName!=NULL) {
-            TextView Name = (TextView) view.findViewById(idName);
+        if (idName != NULL) {
+            TextView Name = view.findViewById(idName);
             Name.setText(Data.getInstance().getName());
         }
-        if (idTime_cooking!=NULL) {
-            TextView Time_cooking = (TextView) view.findViewById(idTime_cooking);
-            Timer timer = new Timer(Time_cooking, Data.getInstance().getTimecooking());
+        if (idTime_cooking != NULL) {
+            TextView Time_cooking = view.findViewById(idTime_cooking);
+            Timer timer = new Timer(Time_cooking, Data.getInstance().getTimeCooking());
             //timer.registerCallback(new Timer.Callback() {
-                //@Override
-                //public void callingBack() {
-                    //Log.d(TAG, "91f19 Calling back");
-                    //FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    //transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
-                    //transaction.replace(R.id.fragment_container, new FullFragment("READY")).commit();
-                //}
+            //@Override
+            //public void callingBack() {
+            //Log.d(TAG, "91f19 Calling back");
+            //FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            //transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+            //transaction.replace(R.id.fragment_container, new FullFragment("READY")).commit();
+            //}
             //});
             timer.startTimer();
         }

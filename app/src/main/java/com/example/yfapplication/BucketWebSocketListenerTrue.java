@@ -1,6 +1,5 @@
 package com.example.yfapplication;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.neovisionaries.ws.client.WebSocket;
@@ -11,11 +10,11 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class BucketWebSocketListenerTrue extends WebSocketAdapter {
-    private Context mContext;
     private static final String TAG = "myLogs";
 
     @Override
@@ -26,12 +25,7 @@ public class BucketWebSocketListenerTrue extends WebSocketAdapter {
         JSONObject dataJson = new JSONObject();
         try {
             json.put("com", "InitModuleLcd");
-            dataJson.put("moduleId", Data.getInstance().getbucket() + 1);
-            //dataJson.put("Mode", 2);
-            //dataJson.put("Name", "Nikolay");
-            //dataJson.put("OrderId", 1223);
-            //dataJson.put("BowlName", "Cesar Salad");
-            //dataJson.put("TimeCooking", 15);
+            dataJson.put("moduleId", Data.getInstance().getBucket() + 1);
             json.put("data", dataJson);
 
         } catch (JSONException e) {
@@ -44,11 +38,11 @@ public class BucketWebSocketListenerTrue extends WebSocketAdapter {
     @Override
     public void onTextMessage(WebSocket websocket, byte[] data) throws Exception {
         super.onTextMessage(websocket, data);
-        String text = data.toString();
+        String text = Arrays.toString(data);
         Log.d(TAG, "91f19 onTextMessageBytes");
         try {
             JSONObject json = new JSONObject(text);
-            if (json.getJSONObject("data").getInt("ModuleId")==Data.getInstance().getbucket() + 1)
+            if (json.getJSONObject("data").getInt("ModuleId") == Data.getInstance().getBucket() + 1)
                 Data.getInstance().JsonParser(json);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -62,7 +56,7 @@ public class BucketWebSocketListenerTrue extends WebSocketAdapter {
         Log.d(TAG, "91f19 " + text);
         try {
             JSONObject json = new JSONObject(text);
-            if (json.getJSONObject("data").getInt("ModuleId")==Data.getInstance().getbucket() + 1)
+            if (json.getJSONObject("data").getInt("ModuleId") == Data.getInstance().getBucket() + 1)
                 Data.getInstance().JsonParser(json);
         } catch (JSONException e) {
             e.printStackTrace();

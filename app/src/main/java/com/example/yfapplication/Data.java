@@ -1,25 +1,23 @@
 package com.example.yfapplication;
 
-import android.app.Activity;
+
 import android.util.Log;
-import android.widget.TextView;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
 import org.json.*;
 
-import androidx.annotation.Nullable;
 
-public class Data {
+class Data {
     private PropertyChangeSupport support = new PropertyChangeSupport(this);
     private static Data sInstance;
     private static final String TAG = "myLogs";
     private bucketNum bucket; // Номер ведра
     private String name = "default"; // Имя заказчика
-    private int ordername = 101; // Номер заказа
-    private String mealname = "default"; // Название блюда
-    private int timecooking = 62; // Время готовки
+    private int orderName = 101; // Номер заказа
+    private String mealName = "default"; // Название блюда
+    private int timeCooking = 62; // Время готовки
     private modeNum mode = modeNum.WAITING; // Режим
     private boolean chargingStatus = true; //Состояние зарядки телефона
 
@@ -36,32 +34,32 @@ public class Data {
         return sInstance.mode;
     }
 
-    int getbucket() {
+    int getBucket() {
         return sInstance.bucket.ordinal();
     }
 
 
-    public String getName() {
+    String getName() {
         return sInstance.name;
     }
 
-    String getOrdername() {
-        return String.valueOf(sInstance.ordername);
+    String getOrderName() {
+        return String.valueOf(sInstance.orderName);
     }
 
-    String getMealname() {
-        return sInstance.mealname;
+    String getMealName() {
+        return sInstance.mealName;
     }
 
-    int getTimecooking() {
-        return sInstance.timecooking;
+    int getTimeCooking() {
+        return sInstance.timeCooking;
     }
 
     void addListener(PropertyChangeListener listener) {
         support.addPropertyChangeListener(listener);
     }
 
-    void removeListener(PropertyChangeListener listener){
+    void removeListener(PropertyChangeListener listener) {
         support.removePropertyChangeListener(listener);
     }
 
@@ -72,20 +70,20 @@ public class Data {
         support.firePropertyChange("variableMode", oldValue, newValue);
     }
 
-    public boolean isChargingStatus() {
+    boolean isChargingStatus() {
         return chargingStatus;
     }
 
-    public void setPhoneStatus(boolean newValue) {
+    void setPhoneStatus(boolean newValue) {
         Log.d(TAG, "91f19 setPhoneStatus");
         boolean oldValue = chargingStatus;
         chargingStatus = newValue;
         support.firePropertyChange("PhoneStatus", oldValue, newValue);
     }
 
-    public void setVariableModeDebug(int i){
+    void setVariableModeDebug(int i) {
         modeNum value = modeNum.WAITING;
-        switch (i){
+        switch (i) {
             case 0:
                 value = modeNum.WAITING;
                 break;
@@ -127,39 +125,39 @@ public class Data {
 
     //Json parser
     void JsonParser(JSONObject json_inner) {
-            try {
-                JSONObject json = json_inner.getJSONObject("data");
-                switch (json.getInt("Mode")) {
-                    case 0: // Режим ожидания заказа (Нет никакой информации)
-                        sInstance.setVariableMode(modeNum.WAITING);
-                        break;
-                    case 1: //Режим готовки блюда (Информация есть)
-                        sInstance.setVariableMode(modeNum.COOKING);
-                        name = json.getString("Name");
-                        ordername = json.getInt("OrderId");
-                        mealname = json.getString("BowlName");
-                        timecooking = json.getInt("TimeCooking");
-                        break;
-                    case 2: //Режим готовности блюда (Информация есть)
-                        sInstance.setVariableMode(modeNum.READY);
-                        name = json.getString("Name");
-                        ordername = json.getInt("OrderId");
-                        mealname = json.getString("BowlName");
-                        timecooking = json.getInt("TimeCooking");
-                        break;
-                    case 3: // Режим смены тарелки (Информация есть)
-                        sInstance.setVariableMode(modeNum.PUT);
-                        name = json.getString("Name");
-                        ordername = json.getInt("OrderId");
-                        mealname = json.getString("BowlName");
-                        timecooking = json.getInt("TimeCooking");
-                        break;
-                }
-                Log.d(TAG, "91f19 Updating data by json");
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Log.d(TAG, "91f19 JSON ERROR");
+        try {
+            JSONObject json = json_inner.getJSONObject("data");
+            switch (json.getInt("Mode")) {
+                case 0: // Режим ожидания заказа (Нет никакой информации)
+                    sInstance.setVariableMode(modeNum.WAITING);
+                    break;
+                case 1: //Режим готовки блюда (Информация есть)
+                    sInstance.setVariableMode(modeNum.COOKING);
+                    name = json.getString("Name");
+                    orderName = json.getInt("OrderId");
+                    mealName = json.getString("BowlName");
+                    timeCooking = json.getInt("TimeCooking");
+                    break;
+                case 2: //Режим готовности блюда (Информация есть)
+                    sInstance.setVariableMode(modeNum.READY);
+                    name = json.getString("Name");
+                    orderName = json.getInt("OrderId");
+                    mealName = json.getString("BowlName");
+                    timeCooking = json.getInt("TimeCooking");
+                    break;
+                case 3: // Режим смены тарелки (Информация есть)
+                    sInstance.setVariableMode(modeNum.PUT);
+                    name = json.getString("Name");
+                    orderName = json.getInt("OrderId");
+                    mealName = json.getString("BowlName");
+                    timeCooking = json.getInt("TimeCooking");
+                    break;
             }
+            Log.d(TAG, "91f19 Updating data by json");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.d(TAG, "91f19 JSON ERROR");
+        }
 
     }
 }
@@ -170,7 +168,7 @@ enum bucketNum {
     THIRD,
     FOURTH
 
-};
+}
 
 enum modeNum { // Режим
     WAITING,
@@ -178,4 +176,4 @@ enum modeNum { // Режим
     READY,
     PUT
 
-};
+}

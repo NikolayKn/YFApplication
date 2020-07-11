@@ -7,33 +7,30 @@ import android.widget.TextView;
 
 
 // Класс для создания таймера готовности блюда
-public class Timer {
+class Timer {
     private static final String TAG = "myLogs";
     final private TextView textView;
     private long timeLeftInMillsSeconds;
 
-    //TODO реализовать callback
-    interface Callback{
-        void callingBack();
+    /*interface Callback{
+        //void callingBack();
     }
 
-    Callback callback;
+    private Callback callback;
 
     public void registerCallback(Callback callback){
         this.callback = callback;
-    }
-
-    private CountDownTimer timer;
+    }*/
 
 
-    public Timer(TextView textView, long timeLeftInMillsSeconds) {
+    Timer(TextView textView, long timeLeftInMillsSeconds) {
         this.textView = textView;
         this.timeLeftInMillsSeconds = timeLeftInMillsSeconds*1000;
 
     }
 
     // Обновление таймера
-    public void updateTimer() {
+    private void updateTimer() {
         int minutes = (int) timeLeftInMillsSeconds / 60000;
 
         @SuppressLint("DefaultLocale")
@@ -42,10 +39,11 @@ public class Timer {
         textView.setText(time);
     }
 
-    public void startTimer() {
+    void startTimer() {
         Log.d(TAG, "91f19 Timer started");
         //Создание таймера
-        timer = new CountDownTimer(timeLeftInMillsSeconds, 1000) {
+        //callback.callingBack();
+        new CountDownTimer(timeLeftInMillsSeconds, 1000) {
             @Override
             public void onTick(long l) {
                 timeLeftInMillsSeconds = l;
@@ -54,7 +52,7 @@ public class Timer {
 
             @Override
             public void onFinish() {
-                String time = String.format("Soon");
+                String time = "Soon";
                 textView.setText(time);
                 //callback.callingBack();
             }

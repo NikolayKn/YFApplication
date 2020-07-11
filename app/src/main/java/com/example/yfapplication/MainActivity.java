@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(Adapter);
         spinner.setPrompt("Title");
 
-        int bucket = mData.getInstance().getbucket();
+        int bucket = mData.getBucket();
         Log.d(TAG, "91f19 Last chose selected " + bucket);
         spinner.setSelection(bucket);
 
@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "91f19 " + flag);
         } catch (IOException e) {
             e.printStackTrace();
-            Log.d(TAG, "91f19 Failed to connect websocket");
+            Log.d(TAG, "91f19 Failed to connect webSocket");
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -248,8 +248,8 @@ public class MainActivity extends AppCompatActivity {
         sPref = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
         // Сохранение выбора
-        ed.putInt(SAVED_TEXT, mData.getbucket());
-        ed.commit();
+        ed.putInt(SAVED_TEXT, mData.getBucket());
+        ed.apply();
 
         Toast.makeText(this, "bucketId saved", Toast.LENGTH_SHORT).show();
     }
@@ -280,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
         JSONObject dataJson = new JSONObject();
         try {
             json.put("com", "ChangeModuleLcd");
-            dataJson.put("moduleId", Data.getInstance().getbucket() + 1);
+            dataJson.put("moduleId", Data.getInstance().getBucket() + 1);
             json.put("data", dataJson);
 
         } catch (JSONException e) {
