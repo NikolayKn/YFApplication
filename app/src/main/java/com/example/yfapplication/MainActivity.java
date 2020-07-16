@@ -4,6 +4,7 @@ package com.example.yfapplication;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -49,23 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "myLogs";
     private boolean isCharging;
 
-    void turnOff() {
-        Log.d(TAG, "91f19 mainActivity_turnOff");
-        if (mData.isChargingStatus()) {
-            WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.screenBrightness = -1;
-            getWindow().setAttributes(params);
-        } else {
-            WindowManager.LayoutParams params = getWindow().getAttributes();
-            params.screenBrightness = 0;
-            getWindow().setAttributes(params);
-        }
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mData = Data.getInstance();
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        mData = Data.getInstance(MainActivity.this);
 
 
         super.onCreate(savedInstanceState);
@@ -117,8 +106,9 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
-        Button btn = findViewById(R.id.main_button);
-        btn.setOnClickListener(new View.OnClickListener() {
+        // кнопка и слушатель на включение debugging mode
+        //Button btn = findViewById(R.id.main_button);
+       /* btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (!isDebuggingMode) return;
@@ -158,26 +148,36 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
-        });
+        });*/
 
 
         // Загрузка состояния зарядки при запуске приложения
-        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = getApplicationContext().registerReceiver(null, filter);
-        assert batteryStatus != null;
-        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
-        isCharging = (status == BatteryManager.BATTERY_STATUS_CHARGING);
-        Log.d(TAG, "91f19 get start charging status " + isCharging);
+
         //mData.setPhoneStatus(isCharging);
 
         //Установление соединения с вебсокетом
         setConnection();
+    }
+// функция, возвращающая уровень заряда (0...100)
+    public float getBatteryLevel() {
+        Intent batteryIntent = registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+        int level = batteryIntent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryIntent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        // Error checking that probably isn't needed but I added just in case.
+        if(level == -1 || scale == -1) {
+            return 50.0f;
+        }
+
+
+        return ((float)level / (float)scale) * 100.0f;
     }
 
 
     @Override
     protected void onStart() {
         super.onStart();
+        mData = Data.getInstance(MainActivity.this);
         Data.getInstance().addListener(myListener);
 
         if (isCreate) isCreate = false;
@@ -189,8 +189,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         Log.d(TAG, "91f19 onStart");
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = getApplicationContext().registerReceiver(null, filter);
+        assert batteryStatus != null;
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        isCharging = (status == BatteryManager.BATTERY_STATUS_CHARGING);
+        Log.d(TAG, "91f19 get start charging status " + isCharging);
+        mData.setPhoneStatus(isCharging);
 
-        Data.getInstance().setPhoneStatus(isCharging);
+
     }
 
 
@@ -201,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "91f19 Start connection");
             WebSocketFactory factory = new WebSocketFactory().setConnectionTimeout(3000);
             ws = factory.createSocket("ws://192.168.1.100:8080/yf");
+           // ws = factory.createSocket("wss://echo.websocket.org");
             ws.addListener(new BucketWebSocketListenerTrue());
             Future<WebSocket> future = ws.connect(s);
             future.get();
@@ -216,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void recreateConnection() throws IOException, ExecutionException, InterruptedException {
         ExecutorService s = Executors.newSingleThreadExecutor();
-        Log.d(TAG, "91f19 Start connection");
+        Log.d(TAG, "91f19 recreate connection");
         ws = ws.recreate();
         Future<WebSocket> future = ws.connect(s);
         future.get();
@@ -224,6 +232,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void closeConnection(String reason) {
         ws.disconnect(1000, reason);
+    }
+
+    void turnOff() {
+        Log.d(TAG, "91f19 mainActivity_turnOff battery % "+getBatteryLevel());
+
+        if (mData.isChargingStatus()) {
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.screenBrightness = -1;
+            getWindow().setAttributes(params);
+        } else {
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.screenBrightness = 0;
+            getWindow().setAttributes(params);
+        }
     }
 
     public void setData() {
@@ -283,6 +305,11 @@ public class MainActivity extends AppCompatActivity {
         closeConnection("Activity destroyed");
         //unregisterReceiver(batteryReceiver);
         mData.removeListener(myListener);
+
+        //установление стандартной яркости
+        //WindowManager.LayoutParams params = getWindow().getAttributes();
+       // params.screenBrightness = -1;
+        //getWindow().setAttributes(params);
         super.onStop();
     }
 
@@ -297,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "91f19 " + json.toString());
+        Log.d(TAG, "91f19 change bucket " + json.toString());
         ws.sendText(json.toString());
     }
 
@@ -309,18 +336,64 @@ public class MainActivity extends AppCompatActivity {
             String propertyName = event.getPropertyName();
             if ("variableMode".equals(propertyName)) {
                 Log.d(TAG, "91f19 listener works!");
+               /* int mode = mData.getMode().ordinal();
+                final String modeString;
+                switch (mode){
+                    case 0:
+                        modeString = "waiting";
+                        break;
+                    case 1:
+                        modeString = "cooking";
+                        break;
+                    case 2:
+                        modeString = "ready";
+                        break;
+                    case 3:
+                        modeString = "put";
+                        break;
+                    default:
+                        modeString="null";
+                }
+                //Toast.makeText(MainActivity.this, "listener, mode :"+modeString, Toast.LENGTH_LONG).show();
+                runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        Toast.makeText(MainActivity.this, "listener, mode :"+modeString, Toast.LENGTH_LONG).show();
+                    }
+                });
+*/
                 setData();
             }
             if ("variableBucket".equals(propertyName)) {
                 changeBucket();
                 saveText();
             }
-            if ("PhoneStatus".equals(propertyName)) {
+            if ("phoneStatus".equals(propertyName)) {
                 Log.d(TAG, "91f19 listener works!_phoneStatus");
-                turnOff();
+                //turnOff();
+            }
+            if ("networkStatus".equals(propertyName)) {
+                Log.d(TAG, "91f19 listener works!_networkStatus");
+                if (!Data.getInstance().isNetworkStatus()) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        recreateConnection();
+                        Log.d(TAG, "91f19 listener works!_try recreate connection");
+                    } catch (IOException | ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                        Log.d(TAG, "91f19 Failed to connect webSocket");
+                        Data.getInstance().setNetworkStatus(true);
+                        Data.getInstance().setNetworkStatus(false);
+                    }
+                }
             }
         }
     }
-
 
 }

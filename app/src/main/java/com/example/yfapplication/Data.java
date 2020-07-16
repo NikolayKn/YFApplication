@@ -1,7 +1,9 @@
 package com.example.yfapplication;
 
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -20,12 +22,22 @@ class Data {
     private int timeCooking = 62; // Время готовки
     private modeNum mode = modeNum.WAITING; // Режим
     private boolean chargingStatus = true; //Состояние зарядки телефона
-
+    private boolean networkStatus = true; //Состояние зарядки телефона
+    private Context mcontext;
 
     synchronized static Data getInstance() {
         if (sInstance == null) {
             sInstance = new Data();
         }
+        return sInstance;
+    }
+
+    synchronized static Data getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new Data();
+
+        }
+        sInstance.mcontext = context;
         return sInstance;
     }
 
@@ -65,9 +77,15 @@ class Data {
 
     private void setVariableMode(modeNum newValue) {
         Log.d(TAG, "91f19 setVariableMode");
+        //Toast.makeText(mcontext, "parser_string mode :", Toast.LENGTH_LONG).show();
+
         modeNum oldValue = mode;
         mode = newValue;
         support.firePropertyChange("variableMode", oldValue, newValue);
+    }
+
+    public boolean isNetworkStatus() {
+        return networkStatus;
     }
 
     boolean isChargingStatus() {
@@ -78,8 +96,16 @@ class Data {
         Log.d(TAG, "91f19 setPhoneStatus");
         boolean oldValue = chargingStatus;
         chargingStatus = newValue;
-        support.firePropertyChange("PhoneStatus", oldValue, newValue);
+        support.firePropertyChange("phoneStatus", oldValue, newValue);
     }
+
+    void setNetworkStatus(boolean newValue) {
+        Log.d(TAG, "91f19 setNetworkStatus");
+        boolean oldValue = networkStatus;
+        networkStatus = newValue;
+        support.firePropertyChange("networkStatus", oldValue, newValue);
+    }
+
 
     void setVariableModeDebug(int i) {
         modeNum value = modeNum.WAITING;
@@ -101,6 +127,7 @@ class Data {
     }
 
     void setVariableBucket(int newVal) {
+
         bucketNum NewValue = bucketNum.FIRST;
         switch (newVal) {
             case 0:
@@ -127,9 +154,11 @@ class Data {
     void JsonParser(JSONObject json_inner) {
         try {
             JSONObject json = json_inner.getJSONObject("data");
+            Log.d(TAG, "91f19 in json parser " );
             switch (json.getInt("Mode")) {
                 case 0: // Режим ожидания заказа (Нет никакой информации)
                     sInstance.setVariableMode(modeNum.WAITING);
+                   // Toast.makeText(mcontext, "parser_string mode :waiting", Toast.LENGTH_SHORT).show();
                     break;
                 case 1: //Режим готовки блюда (Информация есть)
                     sInstance.setVariableMode(modeNum.COOKING);
@@ -137,6 +166,9 @@ class Data {
                     orderName = json.getInt("OrderId");
                     mealName = json.getString("BowlName");
                     timeCooking = json.getInt("TimeCooking");
+
+                    Log.d(TAG, "91f19 in json parser cooking " );
+
                     break;
                 case 2: //Режим готовности блюда (Информация есть)
                     sInstance.setVariableMode(modeNum.READY);
@@ -144,6 +176,7 @@ class Data {
                     orderName = json.getInt("OrderId");
                     mealName = json.getString("BowlName");
                     timeCooking = json.getInt("TimeCooking");
+                    //Toast.makeText(mcontext, "parser_string mode :ready", Toast.LENGTH_SHORT).show();
                     break;
                 case 3: // Режим смены тарелки (Информация есть)
                     sInstance.setVariableMode(modeNum.PUT);
@@ -151,6 +184,7 @@ class Data {
                     orderName = json.getInt("OrderId");
                     mealName = json.getString("BowlName");
                     timeCooking = json.getInt("TimeCooking");
+                   // Toast.makeText(mcontext, "parser_string mode :put", Toast.LENGTH_SHORT).show();
                     break;
             }
             Log.d(TAG, "91f19 Updating data by json");

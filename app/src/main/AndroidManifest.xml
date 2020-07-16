@@ -5,7 +5,10 @@
     android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.QUICKBOOT_POWERON" />
+
 
     <application
         android:allowBackup="false"
@@ -27,14 +30,20 @@
         </activity>
 
         <receiver
-            android:name=".batteryReceiver"
+            android:name=".statusReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"> </action>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_POWER_CONNECTED"> </action>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"> </action>
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
 
