@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "91f19 Start connection");
             WebSocketFactory factory = new WebSocketFactory().setConnectionTimeout(3000);
             ws = factory.createSocket("ws://192.168.1.100:8080/yf");
-           // ws = factory.createSocket("wss://echo.websocket.org");
+            //ws = factory.createSocket("wss://echo.websocket.org");
             ws.addListener(new BucketWebSocketListenerTrue());
             Future<WebSocket> future = ws.connect(s);
             future.get();
@@ -228,6 +228,22 @@ public class MainActivity extends AppCompatActivity {
         ws = ws.recreate();
         Future<WebSocket> future = ws.connect(s);
         future.get();
+    }
+
+    private void recreateConnectionPermanently(){
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        try {
+            recreateConnection();
+        } catch (IOException | ExecutionException | InterruptedException e) {
+            recreateConnectionPermanently();
+            e.printStackTrace();
+        }
+        Log.d(TAG, "try recreate connection");
+
     }
 
     private void closeConnection(String reason) {
@@ -374,23 +390,26 @@ public class MainActivity extends AppCompatActivity {
                 //turnOff();
             }
             if ("networkStatus".equals(propertyName)) {
+                if(Data.getInstance().isNetworkStatus()){
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            Toast.makeText(MainActivity.this, "set connection", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+                else
+                {runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        Toast.makeText(MainActivity.this, "failed connection", Toast.LENGTH_LONG).show();
+                    }
+                });}
                 Log.d(TAG, "91f19 listener works!_networkStatus");
                 if (!Data.getInstance().isNetworkStatus()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    try {
-                        recreateConnection();
-                        Log.d(TAG, "91f19 listener works!_try recreate connection");
-                    } catch (IOException | ExecutionException | InterruptedException e) {
-                        e.printStackTrace();
-                        Log.d(TAG, "91f19 Failed to connect webSocket");
-                        Data.getInstance().setNetworkStatus(true);
-                        Data.getInstance().setNetworkStatus(false);
-                    }
+                   recreateConnectionPermanently();
                 }
             }
         }
